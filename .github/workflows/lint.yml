@@ -1,0 +1,27 @@
+name: Lint
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.9.6
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9.6
+    - name: Install dependencies
+      working-directory: .
+      run: |
+        pip3 install -r requirements.txt
+    - name: Analysing the code with pylint
+      working-directory: .
+      run: |
+        pip3 install pylint pylint-pydantic pylint_pytest_plugin pylint-exit
+        python3 -m pylint src __tests__ || pylint-exit --error-fail $?

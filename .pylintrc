@@ -1,0 +1,61 @@
+[MASTER]
+reports=y
+output-format=colorized
+msg-template="{path}:{line},{column}: {msg_id}: {msg} ({symbol})"
+
+max-line-length=120
+max-returns=7
+ignore=third_party,__tests__
+
+load-plugins=
+    pylint_pydantic,
+    pylint_pytest_plugin,
+
+extension-pkg-whitelist=pydantic
+
+disable=
+    R, # All refactor messages
+    C, # All convention messages
+    missing-class-docstring,
+    missing-function-docstring,
+    missing-module-docstring,
+    method-cache-max-size-none,
+    no-member,
+    raise-missing-from,
+    anomalous-backslash-in-string,
+
+enable=
+    arguments-differ,
+    attribute-defined-outside-init,
+    binary-op-exception,
+    broad-except,
+    consider-iterating-dictionary,
+    consider-using-dict-items,
+    consider-using-enumerate,
+    consider-using-generator,
+    consider-using-in,
+    dangerous-default-value,
+    invalid-envvar-default,
+    no-else-continue,
+    no-else-raise,
+    protected-access,
+    redefined-argument-from-local,
+    redefined-builtin,
+    redefined-outer-name,
+    reimported,
+    self-assigning-variable,
+    superfluous-parens,
+    trailing-comma-tuple,
+    try-except-raise,
+    unidiomatic-typecheck,
+    unnecessary-dunder-call,
+    unused-import,
+    unnecessary-pass,
+    unused-variable,
+    use-implicit-booleaness-not-comparison,
+    use-list-literal,
+    use-maxsplit-arg,
+    useless-import-alias,
+    useless-suppression,
+
+init-hook='import sys; sys.path.append("src")'
