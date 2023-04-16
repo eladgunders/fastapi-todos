@@ -19,7 +19,7 @@ class Config(BaseSettings):
         origins: list[str] = os.environ['ORIGINS'].split(';')
         jwt_secret_key: str = os.environ['JWT_SECRET_KEY']
         try:
-            jwt_token_lifetime_seconds = int(os.getenv('JWT_TOKEN_LIFETIME_SECONDS', JWT_TOKEN_LIFETIME_SECONDS))
+            jwt_token_lifetime_seconds = int(os.getenv('JWT_TOKEN_LIFETIME_SECONDS', str(JWT_TOKEN_LIFETIME_SECONDS)))
         except ValueError:
             jwt_token_lifetime_seconds = JWT_TOKEN_LIFETIME_SECONDS
 
