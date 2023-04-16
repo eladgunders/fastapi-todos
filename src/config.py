@@ -3,7 +3,7 @@ from functools import lru_cache
 from dotenv import load_dotenv
 from pydantic import BaseSettings
 
-from app.constants.auth import JWT_TOKEN_LIFETIME_SECONDS
+from app.constants.auth import JWT_TOKEN_LIFETIME_SECONDS, JWT_HASHING_ALGORITHM
 
 
 class Config(BaseSettings):
