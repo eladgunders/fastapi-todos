@@ -7,6 +7,7 @@ from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users.jwt import SecretType, generate_jwt
 
 from config import get_config
+from app.constants.auth import JWT_HASHING_ALGORITHM
 from db.tables import User
 from db.user_db import get_user_db
 
@@ -44,7 +45,7 @@ class TodosJWTStrategy(JWTStrategy):
             secret: SecretType,
             lifetime_seconds: Optional[int],
             token_audience=None,
-            algorithm: str = 'HS256',
+            algorithm: str = JWT_HASHING_ALGORITHM,
             public_key: Optional[SecretType] = None,
     ):
         if token_audience is None:
