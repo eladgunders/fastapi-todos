@@ -1,6 +1,8 @@
 import threading
+from typing import Optional
 
 from app.db.sql_manager import SQLManager
+from app.db.types.category import CategoryType
 from config import get_config
 
 
@@ -29,3 +31,6 @@ class DBFacade:
 
     async def disconnect_from_databases(self) -> None:
         await self._repo.close_database_connection()
+
+    async def get_categories(self, user_id: Optional[int]) -> [CategoryType]:
+        return await self._repo.get_categories(user_id)
