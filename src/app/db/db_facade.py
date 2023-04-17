@@ -1,5 +1,6 @@
 import threading
 from typing import Optional
+import uuid
 
 from app.db.sql_manager import SQLManager
 from app.db.types.category import CategoryType
@@ -32,5 +33,5 @@ class DBFacade:
     async def disconnect_from_databases(self) -> None:
         await self._repo.close_database_connection()
 
-    async def get_categories(self, user_id: Optional[int]) -> [CategoryType]:
+    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[CategoryType]:
         return await self._repo.get_categories(user_id)

@@ -1,3 +1,4 @@
+import uuid
 from asyncio import current_task
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine, \
     async_scoped_session
@@ -33,9 +34,9 @@ class SQLManager:
         await self._local_session.commit()
         return query_result
 
-    async def get_categories(self, user_id: Optional[int]) -> [CategoryType]:
+    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[CategoryType]:
         query_filter: Any
-        if user_id is not None:
+        if user_id:
             query_filter = or_(Category.created_by_id == user_id, Category.created_by_id.is_(None))
         else:
             query_filter = Category.created_by_id.is_(None)
