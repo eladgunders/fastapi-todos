@@ -3,7 +3,10 @@ from fastapi import APIRouter
 from db.user import auth_backend, fastapi_users
 from db.user_schemas import UserRead, UserCreate, UserUpdate
 
-router = APIRouter(prefix='/auth')
+router = APIRouter(
+    prefix='/auth',
+    tags=['Auth']
+)
 
 
 router.include_router(fastapi_users.get_register_router(UserRead, UserCreate))
