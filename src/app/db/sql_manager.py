@@ -36,10 +36,12 @@ class SQLManager:
 
     async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[CategoryType]:
         query_filter: Any
+        default_categories_filter = Category.created_by_id.is_(None)
         if user_id:
-            query_filter = or_(Category.created_by_id == user_id, Category.created_by_id.is_(None))
+            user_categories_filter = Category.created_by_id == user_id
+            query_filter = or_(user_categories_filter, default_categories_filter)
         else:
-            query_filter = Category.created_by_id.is_(None)
+            query_filter = default_categories_filter
         query = select(Category).filter(query_filter)
         categories: list[tuple[Category]] = (await self._read_from_db(query)).all()
         return [category.get_dict() for (category,) in categories]
