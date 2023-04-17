@@ -7,10 +7,16 @@ from config import get_config
 class DBFacade:
     _instance = None
     _lock = threading.Lock()
-    _repo: SQLManager
 
     def __init__(self):
         raise RuntimeError('Call get_instance() instead')
+
+    def __new__(cls):
+        instance = super().__new__(cls)
+        config = get_config()
+        instance._repo = SQLManager()
+        instance._repo.connect_to_database(config.db_conn_str)
+        return instance
 
     @classmethod
     def get_instance(cls):
@@ -19,9 +25,6 @@ class DBFacade:
         with cls._lock:
             if cls._instance is None:
                 cls._instance = cls.__new__(cls)
-                cls._instance.config = get_config()
-                cls._instance.repo = SQLManager()
-                cls._instance.repo.connect_to_database(cls._instance.config.db_conn_str)
             return cls._instance
 
     async def disconnect_from_databases(self) -> None:
