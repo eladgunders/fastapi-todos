@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, Depends
 
-from db.user import current_logged_user
+from app.endpoints.auth.user import current_logged_user
 from app.db.dao.db_facade import DBFacade
 from app.db.types.category import CategoryType
 
