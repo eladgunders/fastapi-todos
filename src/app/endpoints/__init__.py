@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status
 
-from app.rest import auth, categories
+from app.endpoints import auth, categories
 
 router = APIRouter()
 
