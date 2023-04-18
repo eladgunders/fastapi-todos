@@ -27,7 +27,7 @@ app.include_router(router)
 
 
 @app.on_event('startup')
-async def startup():
+def startup():
     db.connect_to_databases()
 
 
