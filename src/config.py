@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     db_conn_str: str
     origins: list[str]
     jwt_secret_key: str
-    jwt_token_lifetime_seconds: int
+    jwt_lifetime_seconds: int
 
     class Config:
         env_file = '.env'

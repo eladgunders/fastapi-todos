@@ -68,7 +68,7 @@ class TodosJWTStrategy(JWTStrategy):
 def get_jwt_strategy() -> JWTStrategy:
     return TodosJWTStrategy(
         secret=config.jwt_secret_key,
-        lifetime_seconds=config.jwt_token_lifetime_seconds
+        lifetime_seconds=config.jwt_lifetime_seconds
     )
 
 
