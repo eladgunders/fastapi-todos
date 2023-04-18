@@ -8,7 +8,7 @@ from starlette import status
 from starlette.responses import JSONResponse
 
 from app import db
-from app.rest import routers
+from app.endpoints import router
 from config import get_config
 
 config = get_config()
@@ -23,11 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(routers.router)
+app.include_router(router)
 
 
 @app.on_event('startup')
-async def startup():
+def startup():
     db.connect_to_databases()
 
 

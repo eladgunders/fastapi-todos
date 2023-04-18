@@ -1,29 +1,24 @@
-import os
 from functools import lru_cache
-from dotenv import load_dotenv
 from pydantic import BaseSettings
+from typing import Any
 
-from app.constants.auth import JWT_TOKEN_LIFETIME_SECONDS
 
-
-class Config(BaseSettings):
+class Settings(BaseSettings):
     db_conn_str: str
-    origins: str
+    origins: list[str]
     jwt_secret_key: str
     jwt_token_lifetime_seconds: int
 
     class Config:
-        load_dotenv()
+        env_file = '.env'
 
-        db_conn_str: str = os.environ['DB_CONN_STR']
-        origins: list[str] = os.environ['ORIGINS'].split(';')
-        jwt_secret_key: str = os.environ['JWT_SECRET_KEY']
-        try:
-            jwt_token_lifetime_seconds = int(os.getenv('JWT_TOKEN_LIFETIME_SECONDS', str(JWT_TOKEN_LIFETIME_SECONDS)))
-        except ValueError:
-            jwt_token_lifetime_seconds = JWT_TOKEN_LIFETIME_SECONDS
+        @classmethod
+        def parse_env_var(cls, field_name: str, raw_val: str) -> Any:
+            if field_name == 'origins':
+                return [origin for origin in raw_val.split(';')]
+            return cls.json_loads(raw_val)
 
 
 @lru_cache()
 def get_config():
-    return Config()
+    return Settings()
