@@ -21,6 +21,4 @@ class Settings(BaseSettings):
 
 @lru_cache()
 def get_config():
-    s = Settings()
-    print(s.dict())
-    return s
+    return Settings()
