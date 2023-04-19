@@ -9,7 +9,7 @@ class Base:
     __name__: str
 
     @declared_attr
-    def __tablename__(cls) -> str:
+    def __tablename__(cls) -> str:  # pylint: disable: [E0213]
         return humps.depascalize(cls.__name__)
 
     def _dict(self) -> Dict[str, Any]:
