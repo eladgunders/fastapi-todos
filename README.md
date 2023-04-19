@@ -55,7 +55,7 @@ JWT_LIFETIME_SECONDS=43200
 > This project requires a running instance of PostgreSQL to function properly
 
 ### Initiating the database tables
-    $ python3 src/init_db
+    $ python3 src/init_db.py
 
 ### Running the dev server
-    $ python3 src/main
+    $ python3 src/main.py
