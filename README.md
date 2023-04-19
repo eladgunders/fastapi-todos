@@ -13,6 +13,7 @@ The app provides a backend web server for to-do apps.
 This project combines the following:
 
 - [`FastApi`](https://fastapi.tiangolo.com/) for the fast speed web-server.
+- [`FastApiUsers`](https://fastapi-users.github.io/fastapi-users/) for registration and authentication system.
 - [`PostgreSQL`](https://www.postgresql.org/) as the database management system (DBMS).
 - [`SQLAlchemy`](https://www.sqlalchemy.org/) as the object relational mapper (ORM).
 - [`Pydantic`](https://docs.pydantic.dev/) for api data validation at runtime and settings management.
