@@ -8,7 +8,9 @@ from sqlalchemy.orm import sessionmaker
 from typing import Optional, Any
 
 from app.types.category import Category as CategoryT
+from app.types.priority import Priority as PriorityT
 from app.models.tables import Category
+from app.models.tables import Priority
 
 
 class SQLManager:
@@ -33,6 +35,11 @@ class SQLManager:
         query_result: Result = await self._local_session.execute(query)
         await self._local_session.commit()
         return query_result
+
+    async def get_priorities(self) -> list[PriorityT]:
+        query = select(Priority)
+        priorities: list[tuple[Priority]] = (await self._read_from_db(query)).all()
+        return [priority.get_dict() for (priority,) in priorities]
 
     async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[CategoryT]:
         query_filter: Any

@@ -4,6 +4,7 @@ import uuid
 
 from app.db.sql_manager import SQLManager
 from app.types.category import Category
+from app.types.priority import Priority
 from app.core.config import get_config
 
 
@@ -32,6 +33,9 @@ class DBFacade:
 
     async def disconnect_from_databases(self) -> None:
         await self._repo.close_database_connection()
+
+    async def get_priorities(self) -> list[Priority]:
+        return await self._repo.get_priorities()
 
     async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[Category]:
         return await self._repo.get_categories(user_id)
