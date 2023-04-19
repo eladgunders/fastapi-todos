@@ -7,8 +7,8 @@ from sqlalchemy import select, or_
 from sqlalchemy.orm import sessionmaker
 from typing import Optional, Any
 
-from app.db.types.category import CategoryType
-from db.tables import Category
+from app.types.category import Category as CategoryT
+from app.models.tables import Category
 
 
 class SQLManager:
@@ -34,7 +34,7 @@ class SQLManager:
         await self._local_session.commit()
         return query_result
 
-    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[CategoryType]:
+    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[CategoryT]:
         query_filter: Any
         default_categories_filter = Category.created_by_id.is_(None)
         if user_id:

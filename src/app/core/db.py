@@ -1,8 +1,8 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncEngine
 from sqlalchemy.orm import sessionmaker
 
-from config import get_config
-from db.tables import Base
+from app.core.config import get_config
+from app.models.tables import Base
 
 config = get_config()
 connection_string = config.db_conn_str

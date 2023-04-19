@@ -8,8 +8,8 @@ from starlette import status
 from starlette.responses import JSONResponse
 
 from app import db
-from app.endpoints import router
-from config import get_config
+from app.api import router
+from app.core.config import get_config
 
 config = get_config()
 
