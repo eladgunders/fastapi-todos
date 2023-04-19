@@ -7,12 +7,7 @@ from app.models.base import Base
 
 
 class User(SQLAlchemyBaseUserTableUUID, Base):
-    def get_dict(self):
-        return {
-            'id': self.id,
-            'email': self.email,
-            'is_superuser': self.is_superuser
-        }
+    ...
 
 
 class Priority(Base):
