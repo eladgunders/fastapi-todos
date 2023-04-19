@@ -1,15 +1,14 @@
 import uuid
 from typing import Optional
-from fastapi import Depends, Request
-from fastapi_users import BaseUserManager, FastAPIUsers, UUIDIDMixin
+from fastapi import Request
+from fastapi_users import BaseUserManager, UUIDIDMixin
 from fastapi_users.authentication import AuthenticationBackend, JWTStrategy, BearerTransport
-from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users.jwt import SecretType, generate_jwt
 
-from config import get_config
+from app.core.config import get_config
 from app.constants.auth import JWT_HASHING_ALGORITHM
-from db.tables import User
-from db.user_db import get_user_db
+from app.models.tables import User
+
 
 config = get_config()
 
@@ -30,13 +29,6 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             self, user: User, token: str, request: Optional[Request] = None
     ):
         print(f'Verification requested for user {user.id}. Verification token: {token}')
-
-
-async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
-    yield UserManager(user_db)
-
-
-bearer_transport = BearerTransport(tokenUrl='auth/login')
 
 
 class TodosJWTStrategy(JWTStrategy):
@@ -72,12 +64,11 @@ def get_jwt_strategy() -> JWTStrategy:
     )
 
 
+bearer_transport = BearerTransport(tokenUrl='auth/login')
+
+
 auth_backend = AuthenticationBackend(
     name='jwt',
     transport=bearer_transport,
     get_strategy=get_jwt_strategy,
 )
-
-fastapi_users = FastAPIUsers[User, uuid.UUID](get_user_manager, [auth_backend])
-
-current_logged_user = fastapi_users.current_user(active=True, verified=False, superuser=False)
