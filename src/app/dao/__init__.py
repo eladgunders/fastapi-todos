@@ -1,4 +1,4 @@
-from app.db.db_facade import DBFacade
+from app.dao.db_facade import DBFacade
 
 
 def connect_to_databases():

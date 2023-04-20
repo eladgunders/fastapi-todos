@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, Depends
 
 from app.api.deps import current_logged_user
-from app.db.db_facade import DBFacade
+from app.dao.db_facade import DBFacade
 from app.schemas.category import Category
 
 router = APIRouter(
