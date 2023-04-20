@@ -5,19 +5,17 @@
 
 ## Introduction
 
-The app provides a backend web server for to-do apps.
+The app provides an async backend web server for to-do apps.
 
 
 ## Technologies used
 
 This project combines the following:
 
-- [`FastApi`](https://fastapi.tiangolo.com/) for the fast speed web-server.
+- [`FastApi`](https://fastapi.tiangolo.com/) for the fast speed web-server and data validation at runtime.
 - [`FastApiUsers`](https://fastapi-users.github.io/fastapi-users/) for registration and authentication system.
 - [`PostgreSQL`](https://www.postgresql.org/) as the database management system (DBMS).
 - [`SQLAlchemy`](https://www.sqlalchemy.org/) as the object relational mapper (ORM).
-- [`Pydantic`](https://docs.pydantic.dev/) for api data validation at runtime and settings management.
-- [`Pylint`](https://readthedocs.org/projects/pylint/) for static code analysis.
 
 ... and some [more stuff](./requirements.txt).
 
@@ -26,7 +24,7 @@ This project combines the following:
 
 ### Setting up the project
 
-Clone the repository:
+Clone the repository and navigate to its directory:
 
     git clone https://github.com/eladgunders/todos_back.git
     cd todos_back
@@ -52,7 +50,7 @@ JWT_SECRET_KEY=<your-secret-key>
 JWT_LIFETIME_SECONDS=43200
 ```
 
-> **Alert**
+> **Warning**
 > This project requires a running instance of PostgreSQL to function properly
 
 ### Initiating the database tables
