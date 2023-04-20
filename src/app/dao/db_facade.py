@@ -2,7 +2,7 @@ import threading
 from typing import Optional
 import uuid
 
-from app.db.sql_manager import SQLManager
+from app.dao.sql_manager import SQLManager
 from app.types.category import Category
 from app.types.priority import Priority
 from app.core.config import get_config
