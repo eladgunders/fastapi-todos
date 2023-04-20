@@ -1,4 +1,9 @@
-from pydantic import create_model_from_typeddict
-from app.types.priority import Priority as PriorityType
+from pydantic import BaseModel
 
-Priority = create_model_from_typeddict(PriorityType)
+
+class Priority(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True

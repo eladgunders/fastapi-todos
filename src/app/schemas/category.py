@@ -1,4 +1,9 @@
-from pydantic import create_model_from_typeddict
-from app.types.category import Category as CategoryType
+from pydantic import BaseModel
 
-Category = create_model_from_typeddict(CategoryType)
+
+class Category(BaseModel):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True

@@ -7,8 +7,6 @@ from sqlalchemy import select, or_
 from sqlalchemy.orm import sessionmaker
 from typing import Optional, Any
 
-from app.types.category import Category as CategoryT
-from app.types.priority import Priority as PriorityT
 from app.models.tables import Category
 from app.models.tables import Priority
 
@@ -36,12 +34,12 @@ class SQLManager:
         await self._local_session.commit()
         return query_result
 
-    async def get_priorities(self) -> list[PriorityT]:
+    async def get_priorities(self) -> list[Priority]:
         query = select(Priority)
-        priorities: list[tuple[Priority]] = (await self._read_from_db(query)).all()
-        return [priority.get_dict() for (priority,) in priorities]
+        priorities = await self._read_from_db(query)
+        return priorities.scalars().all()
 
-    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[CategoryT]:
+    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[Category]:
         query_filter: Any
         default_categories_filter = Category.created_by_id.is_(None)
         if user_id:
@@ -50,5 +48,5 @@ class SQLManager:
         else:
             query_filter = default_categories_filter
         query = select(Category).filter(query_filter)
-        categories: list[tuple[Category]] = (await self._read_from_db(query)).all()
-        return [category.get_dict() for (category,) in categories]
+        categories = await self._read_from_db(query)
+        return categories.scalars().all()
