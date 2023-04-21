@@ -3,7 +3,7 @@ from typing import Optional
 import uuid
 
 from app.dao.sql_manager import SQLManager
-from app.models.tables import Priority, Category
+from app.models.tables import Priority, Category, Todo
 from app.schemas.category import CategoryIn
 from app.core.config import get_config
 
@@ -50,3 +50,6 @@ class DBFacade:
         if category.created_by_id != user_id:
             raise ValueError('a user can not delete a category that was not created by him')
         await self._repo.delete_category(category_id)
+
+    async def get_todos(self, user_id: uuid.UUID) -> list[Todo]:
+        return await self._repo.get_todos(user_id)

@@ -4,12 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngin
     async_scoped_session
 from sqlalchemy.engine.result import Result
 from sqlalchemy import select, insert, delete, or_
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, selectinload
 from typing import Optional, Any, Type
 from pydantic import BaseModel
 
 from app.models.base import Base
-from app.models.tables import Category, Priority
+from app.models.tables import Category, Priority, Todo, TodoCategory
 from app.schemas.category import CategoryIn
 
 
@@ -75,4 +75,13 @@ class SQLManager:
 
     async def delete_category(self, category_id: int) -> None:
         await self._delete_by_id(category_id, Category)
+
+    async def get_todos(self, user_id: uuid.UUID) -> list[Todo]:
+        query_filter = Todo.created_by_id == user_id
+        query = select(Todo).filter(query_filter).options(
+            selectinload(Todo.priority),
+            selectinload(Todo.todos_categories).selectinload(TodoCategory.category)
+        )
+        todos = await self._read_from_db(query)
+        return todos.scalars().all()
 
