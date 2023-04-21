@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class Priority(BaseModel):
+class PriorityOut(BaseModel):
     id: int
     name: str
 
