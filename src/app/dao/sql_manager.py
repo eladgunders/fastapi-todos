@@ -3,12 +3,14 @@ from asyncio import current_task
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine, \
     async_scoped_session
 from sqlalchemy.engine.result import Result
-from sqlalchemy import select, or_
+from sqlalchemy import select, insert, or_
 from sqlalchemy.orm import sessionmaker
-from typing import Optional, Any
+from typing import Optional, Any, Type
+from pydantic import BaseModel
 
-from app.models.tables import Category
-from app.models.tables import Priority
+from app.models.base import Base
+from app.models.tables import Category, Priority
+from app.schemas.category import CategoryIn
 
 
 class SQLManager:
@@ -34,6 +36,12 @@ class SQLManager:
         await self._local_session.commit()
         return query_result
 
+    async def _add_one(self, item: BaseModel, model: Type[Base]) -> None:
+        item_data = dict(item)
+        query = insert(model).values(item_data)
+        await self._local_session.execute(query)
+        await self._local_session.commit()
+
     async def get_priorities(self) -> list[Priority]:
         query = select(Priority)
         priorities = await self._read_from_db(query)
@@ -50,3 +58,7 @@ class SQLManager:
         query = select(Category).filter(query_filter)
         categories = await self._read_from_db(query)
         return categories.scalars().all()
+
+    async def add_category(self, category: CategoryIn) -> None:
+        await self._add_one(category, Category)
+
