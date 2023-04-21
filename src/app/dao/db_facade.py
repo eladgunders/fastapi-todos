@@ -4,6 +4,7 @@ import uuid
 
 from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category
+from app.schemas.category import CategoryIn
 from app.core.config import get_config
 
 
@@ -38,3 +39,6 @@ class DBFacade:
 
     async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[Category]:
         return await self._repo.get_categories(user_id)
+
+    async def add_category(self, category: CategoryIn) -> None:
+        return await self._repo.add_category(category)

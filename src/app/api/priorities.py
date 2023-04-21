@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, Depends
 
 from app.api.deps import current_logged_user
 from app.dao.db_facade import DBFacade
@@ -13,6 +13,6 @@ router = APIRouter(
 db_facade = DBFacade.get_instance()
 
 
-@router.get('', response_model=list[Priority], status_code=status.HTTP_200_OK)
+@router.get('', response_model=list[Priority])
 async def get_priorities():
     return await db_facade.get_priorities()
