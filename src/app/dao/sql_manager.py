@@ -3,7 +3,7 @@ from asyncio import current_task
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine, \
     async_scoped_session
 from sqlalchemy.engine.result import Result
-from sqlalchemy import select, insert, or_
+from sqlalchemy import select, insert, delete, or_
 from sqlalchemy.orm import sessionmaker
 from typing import Optional, Any, Type
 from pydantic import BaseModel
@@ -42,6 +42,11 @@ class SQLManager:
         await self._local_session.execute(query)
         await self._local_session.commit()
 
+    async def _delete_by_id(self, item_id: int, model: Type[Base]) -> None:
+        query = delete(model).where(model.id == item_id)
+        await self._local_session.execute(query)
+        await self._local_session.commit()
+
     async def get_priorities(self) -> list[Priority]:
         query = select(Priority)
         priorities = await self._read_from_db(query)
@@ -59,6 +64,15 @@ class SQLManager:
         categories = await self._read_from_db(query)
         return categories.scalars().all()
 
+    async def get_category_by_id(self, category_id: int) -> Optional[Category]:
+        query_filter = Category.id == category_id
+        query = select(Category).filter(query_filter)
+        category = await self._read_from_db(query)
+        return category.scalars().first()
+
     async def add_category(self, category: CategoryIn) -> None:
         await self._add_one(category, Category)
+
+    async def delete_category(self, category_id: int) -> None:
+        await self._delete_by_id(category_id, Category)
 
