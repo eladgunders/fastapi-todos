@@ -44,7 +44,7 @@ class DBFacade:
         return await self._repo.add_category(category)
 
     async def delete_category(self, category_id: int, user_id: uuid.UUID) -> None:
-        category: Optional[Category] = await self._repo.get_category_by_id(category_id)
+        category: Optional[Category] = await self._repo.get_category(category_id)
         if not category:
             raise ValueError('category does not exist')
         if category.created_by_id != user_id:

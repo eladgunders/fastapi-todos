@@ -64,7 +64,7 @@ class SQLManager:
         categories = await self._read_from_db(query)
         return categories.scalars().all()
 
-    async def get_category_by_id(self, category_id: int) -> Optional[Category]:
+    async def get_category(self, category_id: int) -> Optional[Category]:
         query_filter = Category.id == category_id
         query = select(Category).filter(query_filter)
         category = await self._read_from_db(query)
