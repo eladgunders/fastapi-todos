@@ -17,7 +17,7 @@ class Priority(Base):
 
 class Category(Base):
     id = Column(BigInteger(), primary_key=True, autoincrement=True)
-    name = Column(Text(), nullable=False, unique=True)
+    name = Column(Text(), nullable=False)
     # Default category are those where created_by_id is NULL,
     # indicating they are created by the system and are applicable to all users
     created_by_id = Column(GUID, ForeignKey('user.id'))
