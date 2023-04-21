@@ -38,6 +38,7 @@ class Todo(Base):
 
     created_by: RelationshipProperty = relationship('User')
     priority: RelationshipProperty = relationship('Priority')
+    categories: RelationshipProperty = relationship('TodoCategory', back_populates='todo_id')
 
     def get_dict(self):
         return {
