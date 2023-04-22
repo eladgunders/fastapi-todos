@@ -6,6 +6,7 @@ from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category, Todo
 from app.schemas.category import CategoryIn
 from app.core.config import get_config
+from app.utils.exceptions import ResourceNotExists
 
 
 class DBFacade:
@@ -46,7 +47,7 @@ class DBFacade:
     async def delete_category(self, category_id: int, created_by_id: uuid.UUID) -> None:
         category: Optional[Category] = await self._repo.get_category(category_id)
         if not category:
-            raise ValueError('category does not exist')
+            raise ResourceNotExists('category does not exist')
         if category.created_by_id != created_by_id:
             raise ValueError('a user can not delete a category that was not created by him')
         await self._repo.delete_category(category_id)
