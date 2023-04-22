@@ -3,14 +3,17 @@ from asyncio import current_task
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine, \
     async_scoped_session
 from sqlalchemy.engine.result import Result
-from sqlalchemy import select, insert, delete, or_
+from sqlalchemy import select, delete, or_
 from sqlalchemy.orm import sessionmaker, selectinload
-from typing import Optional, Any, Type, Union
-from pydantic import BaseModel
+from typing import Optional, Any, Type, TypeVar
 
 from app.models.base import Base
 from app.models.tables import Category, Priority, Todo, TodoCategory
 from app.schemas.category import CategoryIn
+from app.schemas.todo import TodoIn
+
+
+ModelType = TypeVar("ModelType", bound=Base)
 
 
 class SQLManager:
@@ -36,13 +39,12 @@ class SQLManager:
         await self._local_session.commit()
         return query_result
 
-    async def _add_one(self, item: BaseModel, model: Type[Base]) -> None:
-        item_data = dict(item)
-        query = insert(model).values(item_data)
-        await self._local_session.execute(query)
+    async def _add_one(self, item: ModelType) -> ModelType:
+        self._local_session.add(item)
         await self._local_session.commit()
+        return item
 
-    async def _delete_by_id(self, item_id: int, model: Type[Base]) -> None:
+    async def _delete_by_id(self, item_id: int, model: Type[ModelType]) -> None:
         query = delete(model).where(model.id == item_id)
         await self._local_session.execute(query)
         await self._local_session.commit()
@@ -70,8 +72,10 @@ class SQLManager:
         category = await self._read_from_db(query)
         return category.scalars().first()
 
-    async def add_category(self, category: CategoryIn) -> None:
-        await self._add_one(category, Category)
+    async def add_category(self, category: CategoryIn) -> Category:
+        category_data = dict(category)
+        category_obj = Category(**category_data)
+        return await self._add_one(category_obj)
 
     async def delete_category(self, category_id: int) -> None:
         await self._delete_by_id(category_id, Category)
@@ -84,4 +88,7 @@ class SQLManager:
         )
         todos = await self._read_from_db(query)
         return todos.scalars().all()
+
+    # async def add_todo(self, todo: TodoIn, categories: list[int]) -> None:
+    #     await self._add_one(todo, Todo)
 

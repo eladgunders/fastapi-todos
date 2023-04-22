@@ -1,8 +1,9 @@
 import threading
-from typing import Optional, Union
+from typing import Optional
 import uuid
 
 from app.dao.sql_manager import SQLManager
+from app.models.base import Base
 from app.models.tables import Priority, Category, Todo
 from app.schemas.category import CategoryIn
 from app.core.config import get_config
@@ -41,7 +42,7 @@ class DBFacade:
     async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> list[Category]:
         return await self._repo.get_categories(created_by_id)
 
-    async def add_category(self, category: CategoryIn) -> None:
+    async def add_category(self, category: CategoryIn) -> Category:
         categories: list[Category] = await self.get_categories(category.created_by_id)
         categories_names: list[str] = list(map(lambda c: c.name, categories))
         if category.name in categories_names:
