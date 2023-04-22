@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngin
 from sqlalchemy.engine.result import Result
 from sqlalchemy import select, insert, delete, or_
 from sqlalchemy.orm import sessionmaker, selectinload
-from typing import Optional, Any, Type
+from typing import Optional, Any, Type, Union
 from pydantic import BaseModel
 
 from app.models.base import Base
@@ -52,15 +52,17 @@ class SQLManager:
         priorities = await self._read_from_db(query)
         return priorities.scalars().all()
 
-    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[Category]:
+    async def get_categories(self, created_by_id: Optional[uuid.UUID], names_only: bool = False) \
+            -> Union[list[Category], list[str]]:
         query_filter: Any
         default_categories_filter = Category.created_by_id.is_(None)
-        if user_id:
-            user_categories_filter = Category.created_by_id == user_id
+        if created_by_id:
+            user_categories_filter = Category.created_by_id == created_by_id
             query_filter = or_(user_categories_filter, default_categories_filter)
         else:
             query_filter = default_categories_filter
-        query = select(Category).filter(query_filter)
+        select_query = Category.name if names_only else Category
+        query = select(select_query).filter(query_filter)
         categories = await self._read_from_db(query)
         return categories.scalars().all()
 
@@ -76,8 +78,8 @@ class SQLManager:
     async def delete_category(self, category_id: int) -> None:
         await self._delete_by_id(category_id, Category)
 
-    async def get_todos(self, user_id: uuid.UUID) -> list[Todo]:
-        query_filter = Todo.created_by_id == user_id
+    async def get_todos(self, created_by_id: uuid.UUID) -> list[Todo]:
+        query_filter = Todo.created_by_id == created_by_id
         query = select(Todo).filter(query_filter).options(
             selectinload(Todo.priority),
             selectinload(Todo.todos_categories).selectinload(TodoCategory.category)
