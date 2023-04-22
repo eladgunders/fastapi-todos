@@ -1,5 +1,5 @@
 import threading
-from typing import Optional
+from typing import Optional, Union
 import uuid
 
 from app.dao.sql_manager import SQLManager
@@ -38,10 +38,13 @@ class DBFacade:
     async def get_priorities(self) -> list[Priority]:
         return await self._repo.get_priorities()
 
-    async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> list[Category]:
+    async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> Union[list[Category], list[str]]:
         return await self._repo.get_categories(created_by_id)
 
     async def add_category(self, category: CategoryIn) -> None:
+        categories_names: list[str] = await self._repo.get_categories(category.created_by_id, names_only=True)
+        if category.name in categories_names:
+            raise ValueError('category name already exists')
         return await self._repo.add_category(category)
 
     async def delete_category(self, category_id: int, created_by_id: uuid.UUID) -> None:

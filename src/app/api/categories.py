@@ -20,6 +20,7 @@ async def get_categories(user=Depends(current_logged_user)):
 
 
 @router.post('', status_code=status.HTTP_201_CREATED)
+@exception_handler
 async def add_category(category: CategoryIn, user=Depends(current_logged_user)):
     category.created_by_id = user.id
     await db_facade.add_category(category)
