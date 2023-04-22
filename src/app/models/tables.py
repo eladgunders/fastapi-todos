@@ -1,6 +1,6 @@
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from fastapi_users_db_sqlalchemy import GUID
-from sqlalchemy import Column, ForeignKey, Text, String, BigInteger, Boolean
+from sqlalchemy import Column, ForeignKey, Text, String, BigInteger, Boolean, UniqueConstraint
 from sqlalchemy.orm import relationship
 
 from app.models.base import Base
@@ -21,6 +21,10 @@ class Category(Base):
     # Default category are those where created_by_id is NULL,
     # indicating they are created by the system and are applicable to all users
     created_by_id = Column(GUID, ForeignKey('user.id'))
+
+    __table_args__ = (
+        UniqueConstraint('name', 'created_by_id', name='unique_category'),
+    )
 
 
 class Todo(Base):
