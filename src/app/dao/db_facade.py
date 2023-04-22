@@ -1,5 +1,5 @@
 import threading
-from typing import Optional, Union
+from typing import Optional
 import uuid
 
 from app.dao.sql_manager import SQLManager
