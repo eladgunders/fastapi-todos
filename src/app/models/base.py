@@ -16,7 +16,7 @@ class Base:
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
     def __repr__(self) -> str:
-        columns = [f'{col}: {getattr(self, col)}' for col in self._dict()]
+        columns = [f'{col}: {getattr(self, col)}' for col in self.get_dict()]
         return f'{self.__class__.__name__}({", ".join(columns)})'
 
     def __str__(self) -> str:
