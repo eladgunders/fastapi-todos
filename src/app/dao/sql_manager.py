@@ -52,11 +52,11 @@ class SQLManager:
         priorities = await self._read_from_db(query)
         return priorities.scalars().all()
 
-    async def get_categories(self, user_id: Optional[uuid.UUID]) -> list[Category]:
+    async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> list[Category]:
         query_filter: Any
         default_categories_filter = Category.created_by_id.is_(None)
-        if user_id:
-            user_categories_filter = Category.created_by_id == user_id
+        if created_by_id:
+            user_categories_filter = Category.created_by_id == created_by_id
             query_filter = or_(user_categories_filter, default_categories_filter)
         else:
             query_filter = default_categories_filter
@@ -76,8 +76,8 @@ class SQLManager:
     async def delete_category(self, category_id: int) -> None:
         await self._delete_by_id(category_id, Category)
 
-    async def get_todos(self, user_id: uuid.UUID) -> list[Todo]:
-        query_filter = Todo.created_by_id == user_id
+    async def get_todos(self, created_by_id: uuid.UUID) -> list[Todo]:
+        query_filter = Todo.created_by_id == created_by_id
         query = select(Todo).filter(query_filter).options(
             selectinload(Todo.priority),
             selectinload(Todo.todos_categories).selectinload(TodoCategory.category)
