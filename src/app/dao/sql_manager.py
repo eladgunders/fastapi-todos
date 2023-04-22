@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngin
 from sqlalchemy.engine.result import Result
 from sqlalchemy import select, insert, delete, or_
 from sqlalchemy.orm import sessionmaker, selectinload
-from typing import Optional, Any, Type, Union
+from typing import Optional, Any, Type
 from pydantic import BaseModel
 
 from app.models.base import Base
