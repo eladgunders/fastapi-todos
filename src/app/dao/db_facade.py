@@ -42,7 +42,8 @@ class DBFacade:
         return await self._repo.get_categories(created_by_id)
 
     async def add_category(self, category: CategoryIn) -> None:
-        categories_names: list[str] = await self._repo.get_categories(category.created_by_id, names_only=True)
+        categories: list[Category] = await self.get_categories(category.created_by_id)
+        categories_names: list[str] = list(map(lambda c: c.name, categories))
         if category.name in categories_names:
             raise ValueError('category name already exists')
         return await self._repo.add_category(category)
