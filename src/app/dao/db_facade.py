@@ -38,7 +38,7 @@ class DBFacade:
     async def get_priorities(self) -> list[Priority]:
         return await self._repo.get_priorities()
 
-    async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> Union[list[Category], list[str]]:
+    async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> list[Category]:
         return await self._repo.get_categories(created_by_id)
 
     async def add_category(self, category: CategoryIn) -> None:
