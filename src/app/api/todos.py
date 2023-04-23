@@ -26,7 +26,7 @@ async def add_todo(todo_in: TodoCreate, user=Depends(current_logged_user)):
     todo = TodoInDB(
         content=todo_in.content,
         priority_id=todo_in.priority_id,
-        categories=todo_in.categories,
+        categories_ids=todo_in.categories_ids,
         created_by_id=user.id
     )
     return await db_facade.add_todo(todo)

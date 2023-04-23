@@ -1,6 +1,6 @@
 import uuid
 from pydantic import BaseModel
-from typing import Optional, Union
+from typing import Optional
 
 from app.schemas.priority import PriorityOut
 from app.schemas.category import CategoryOut
@@ -9,7 +9,6 @@ from app.schemas.todo_category import TodoCategoryOut
 
 class TodoBase(BaseModel):
     content: str
-    categories: Union[list[int], Optional[list[CategoryOut]]]
 
 
 class TodoOut(TodoBase):
@@ -33,7 +32,7 @@ class TodoOut(TodoBase):
 
 class TodoCreate(TodoBase):
     priority_id: int
-    categories: list[int]
+    categories_ids: list[int]
 
 
 class TodoInDB(TodoCreate):

@@ -44,7 +44,7 @@ class DBFacade:
 
     async def add_category(self, category: CategoryInDB) -> Category:
         categories: list[Category] = await self.get_categories(category.created_by_id)
-        categories_names: list[str] = list(map(lambda c: c.name, categories))
+        categories_names: list[str] = [c.name for c in categories]
         if category.name in categories_names:
             raise ValueError('category name already exists')
         return await self._repo.add_category(category)
@@ -61,4 +61,5 @@ class DBFacade:
         return await self._repo.get_todos(created_by_id)
 
     async def add_todo(self, todo: TodoInDB) -> Todo:
+        # TODO: add validations
         return await self._repo.add_todo(todo)

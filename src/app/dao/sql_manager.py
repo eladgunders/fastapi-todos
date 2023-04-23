@@ -91,13 +91,10 @@ class SQLManager:
 
     async def add_todo(self, todo: TodoInDB) -> Todo:
         todo_data = dict(todo)
-        # adding relationship todo_category
-        todo_data['todos_categories'] = list(map(
-            lambda category_id: TodoCategory(category_id=category_id),
-            todo_data['categories']
-        ))
-        todo_data.pop('categories')  # removing unused field
+        categories_ids: list[int] = todo_data.pop('categories_ids')  # removing field and saving value
+        todo_data['todos_categories'] = \
+            [TodoCategory(category_id=id_) for id_ in categories_ids]  # adding relationship todos_categories
         todo_obj = Todo(**todo_data)
-        todo_in_db = await self._add_one(todo_obj)
-        return await self._get_by_id(todo_in_db.id, Todo)
+        todo_from_db = await self._add_one(todo_obj)
+        return await self._get_by_id(todo_from_db.id, Todo)
 
