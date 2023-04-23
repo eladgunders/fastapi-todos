@@ -4,7 +4,8 @@ import uuid
 
 from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category, Todo
-from app.schemas.category import CategoryIn
+from app.schemas.category import CategoryInDB
+from app.schemas.todo import TodoInDB
 from app.core.config import get_config
 from app.utils.exceptions import ResourceNotExists
 
@@ -41,7 +42,7 @@ class DBFacade:
     async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> list[Category]:
         return await self._repo.get_categories(created_by_id)
 
-    async def add_category(self, category: CategoryIn) -> Category:
+    async def add_category(self, category: CategoryInDB) -> Category:
         categories: list[Category] = await self.get_categories(category.created_by_id)
         categories_names: list[str] = list(map(lambda c: c.name, categories))
         if category.name in categories_names:
@@ -58,3 +59,6 @@ class DBFacade:
 
     async def get_todos(self, created_by_id: uuid.UUID) -> list[Todo]:
         return await self._repo.get_todos(created_by_id)
+
+    async def add_todo(self, todo: TodoInDB) -> Todo:
+        return await self._repo.add_todo(todo)

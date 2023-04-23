@@ -4,13 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngin
     async_scoped_session
 from sqlalchemy.engine.result import Result
 from sqlalchemy import select, delete, or_
-from sqlalchemy.orm import sessionmaker, selectinload
+from sqlalchemy.orm import sessionmaker
 from typing import Optional, Any, Type, TypeVar
 
 from app.models.base import Base
 from app.models.tables import Category, Priority, Todo, TodoCategory
-from app.schemas.category import CategoryIn
-from app.schemas.todo import TodoIn
+from app.schemas.category import CategoryInDB
+from app.schemas.todo import TodoInDB
 
 
 ModelType = TypeVar("ModelType", bound=Base)
@@ -38,6 +38,12 @@ class SQLManager:
         query_result: Result = await self._local_session.execute(query)
         await self._local_session.commit()
         return query_result
+
+    async def _get_by_id(self, item_id: int, model: Type[ModelType]) -> Optional[ModelType]:
+        query_filter = model.id == item_id
+        query = select(model).filter(query_filter)
+        item = await self._read_from_db(query)
+        return item.scalars().first()
 
     async def _add_one(self, item: ModelType) -> ModelType:
         self._local_session.add(item)
@@ -67,12 +73,9 @@ class SQLManager:
         return categories.scalars().all()
 
     async def get_category(self, category_id: int) -> Optional[Category]:
-        query_filter = Category.id == category_id
-        query = select(Category).filter(query_filter)
-        category = await self._read_from_db(query)
-        return category.scalars().first()
+        return await self._get_by_id(category_id, Category)
 
-    async def add_category(self, category: CategoryIn) -> Category:
+    async def add_category(self, category: CategoryInDB) -> Category:
         category_data = dict(category)
         category_obj = Category(**category_data)
         return await self._add_one(category_obj)
@@ -82,13 +85,19 @@ class SQLManager:
 
     async def get_todos(self, created_by_id: uuid.UUID) -> list[Todo]:
         query_filter = Todo.created_by_id == created_by_id
-        query = select(Todo).filter(query_filter).options(
-            selectinload(Todo.priority),
-            selectinload(Todo.todos_categories).selectinload(TodoCategory.category)
-        )
+        query = select(Todo).filter(query_filter)
         todos = await self._read_from_db(query)
         return todos.scalars().all()
 
-    # async def add_todo(self, todo: TodoIn, categories: list[int]) -> None:
-    #     await self._add_one(todo, Todo)
+    async def add_todo(self, todo: TodoInDB) -> Todo:
+        todo_data = dict(todo)
+        # adding relationship todo_category
+        todo_data['todos_categories'] = list(map(
+            lambda category_id: TodoCategory(category_id=category_id),
+            todo_data['categories']
+        ))
+        todo_data.pop('categories')  # removing unused field
+        todo_obj = Todo(**todo_data)
+        todo_in_db = await self._add_one(todo_obj)
+        return await self._get_by_id(todo_in_db.id, Todo)
 
