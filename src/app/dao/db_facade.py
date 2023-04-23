@@ -3,7 +3,6 @@ from typing import Optional
 import uuid
 
 from app.dao.sql_manager import SQLManager
-from app.models.base import Base
 from app.models.tables import Priority, Category, Todo
 from app.schemas.category import CategoryIn
 from app.core.config import get_config
