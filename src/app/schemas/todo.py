@@ -1,3 +1,4 @@
+import uuid
 from pydantic import BaseModel
 from typing import Optional
 
@@ -6,10 +7,13 @@ from app.schemas.category import CategoryOut
 from app.schemas.todo_category import TodoCategoryOut
 
 
-class TodoOut(BaseModel):
+class TodoBase(BaseModel):
+    content: str
+
+
+class TodoOut(TodoBase):
     id: int
     is_completed: bool
-    content: str
     priority: PriorityOut
     todos_categories: Optional[list[TodoCategoryOut]]  # exists in the orm model but to part of the instance
     categories: Optional[list[CategoryOut]]  # not exists in the orm model but part of the instance
@@ -24,3 +28,12 @@ class TodoOut(BaseModel):
         model.categories = [ct.category for ct in model.todos_categories]
         delattr(model, 'todos_categories')
         return model
+
+
+class TodoCreate(TodoBase):
+    priority_id: int
+    categories_ids: list[int]
+
+
+class TodoInDB(TodoCreate):
+    created_by_id: uuid.UUID

@@ -34,8 +34,8 @@ class Todo(Base):
     created_by_id = Column(GUID, ForeignKey('user.id'), nullable=False)
     priority_id = Column(BigInteger(), ForeignKey('priority.id'), nullable=False)
 
-    priority = relationship('Priority')
-    todos_categories = relationship('TodoCategory')
+    priority = relationship('Priority', lazy='selectin')
+    todos_categories = relationship('TodoCategory', lazy='selectin')
 
 
 class TodoCategory(Base):
@@ -43,4 +43,4 @@ class TodoCategory(Base):
     todo_id = Column(BigInteger(), ForeignKey('todo.id'), nullable=False)
     category_id = Column(BigInteger(), ForeignKey('category.id'), nullable=False)
 
-    category = relationship('Category')
+    category = relationship('Category', lazy='selectin')

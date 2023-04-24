@@ -1,12 +1,14 @@
 import threading
 from typing import Optional
 import uuid
+from sqlalchemy.exc import IntegrityError
 
 from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category, Todo
-from app.schemas.category import CategoryIn
+from app.schemas.category import CategoryInDB
+from app.schemas.todo import TodoInDB
 from app.core.config import get_config
-from app.utils.exceptions import ResourceNotExists
+from app.utils.exceptions import ResourceNotExists, Forbidden
 
 
 class DBFacade:
@@ -41,10 +43,10 @@ class DBFacade:
     async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> list[Category]:
         return await self._repo.get_categories(created_by_id)
 
-    async def add_category(self, category: CategoryIn) -> None:
-        categories: list[Category] = await self.get_categories(category.created_by_id)
-        categories_names: list[str] = list(map(lambda c: c.name, categories))
-        if category.name in categories_names:
+    async def add_category(self, category: CategoryInDB) -> Category:
+        users_categories: list[Category] = await self.get_categories(category.created_by_id)
+        users_categories_names: list[str] = [c.name for c in users_categories]
+        if category.name in users_categories_names:
             raise ValueError('category name already exists')
         return await self._repo.add_category(category)
 
@@ -53,8 +55,20 @@ class DBFacade:
         if not category:
             raise ResourceNotExists('category does not exist')
         if category.created_by_id != created_by_id:
-            raise ValueError('a user can not delete a category that was not created by him')
+            raise Forbidden('a user can not delete a category that was not created by him')
         await self._repo.delete_category(category_id)
 
     async def get_todos(self, created_by_id: uuid.UUID) -> list[Todo]:
         return await self._repo.get_todos(created_by_id)
+
+    async def add_todo(self, todo: TodoInDB) -> Todo:
+        todo_categories_ids: list[int] = todo.categories_ids
+        users_categories: list[Category] = await self.get_categories(todo.created_by_id)
+        user_categories_ids: list[int] = [c.id for c in users_categories]
+        is_categories_valid: bool = all(c_id in user_categories_ids for c_id in todo_categories_ids)
+        if is_categories_valid:
+            try:
+                return await self._repo.add_todo(todo)
+            except IntegrityError:
+                raise ValueError('priority does not exists')
+        raise ValueError('not all categories associated with the todo belong to the user')
