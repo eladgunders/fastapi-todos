@@ -65,8 +65,8 @@ class DBFacade:
         todo_categories_ids: list[int] = todo.categories_ids
         users_categories: list[Category] = await self.get_categories(todo.created_by_id)
         user_categories_ids: list[int] = [c.id for c in users_categories]
-        is_categories_valid: bool = all(c_id in user_categories_ids for c_id in todo_categories_ids)
-        if is_categories_valid:
+        are_categories_valid: bool = all(c_id in user_categories_ids for c_id in todo_categories_ids)
+        if are_categories_valid:
             try:
                 return await self._repo.add_todo(todo)
             except IntegrityError:
