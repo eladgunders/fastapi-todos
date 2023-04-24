@@ -93,7 +93,7 @@ class SQLManager:
         todo_data = dict(todo)
         categories_ids: list[int] = todo_data.pop('categories_ids')  # removing field and saving value
         todo_data['todos_categories'] = \
-            [TodoCategory(category_id=id_) for id_ in categories_ids]  # adding relationship todos_categories
+            [TodoCategory(category_id=c_id) for c_id in categories_ids]  # adding relationship todos_categories
         todo_obj = Todo(**todo_data)
         todo_from_db = await self._add_one(todo_obj)
         return await self._get_by_id(todo_from_db.id, Todo)
