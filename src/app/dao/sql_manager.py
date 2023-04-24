@@ -97,4 +97,3 @@ class SQLManager:
         todo_obj = Todo(**todo_data)
         todo_from_db = await self._add_one(todo_obj)
         return await self._get_by_id(todo_from_db.id, Todo)
-
