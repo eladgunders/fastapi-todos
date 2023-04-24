@@ -1,5 +1,5 @@
 import humps
-from typing import Any, Dict
+from typing import Any
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy import inspect
 
@@ -12,7 +12,7 @@ class Base:
     def __tablename__(cls) -> str:  # pylint: disable=no-self-argument
         return humps.depascalize(cls.__name__)
 
-    def get_dict(self) -> Dict[str, Any]:
+    def get_dict(self) -> dict[str, Any]:
         return {c.key: getattr(self, c.key) for c in inspect(self).mapper.column_attrs}
 
     def __repr__(self) -> str:
