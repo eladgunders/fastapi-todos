@@ -4,9 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngin
     async_scoped_session
 from sqlalchemy.engine.result import Result
 from sqlalchemy import select, delete, or_
-from sqlalchemy.orm import sessionmaker, selectinload
+from sqlalchemy.orm import sessionmaker
 from typing import Optional, Any, Type, TypeVar
-from pydantic import BaseModel
 
 from app.models.base import Base
 from app.models.tables import Category, Priority, Todo, TodoCategory
