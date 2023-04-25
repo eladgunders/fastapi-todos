@@ -1,6 +1,3 @@
-[MISCELLANEOUS]
-notes=TODO
-
 [MASTER]
 reports=y
 output-format=colorized
@@ -26,6 +23,7 @@ disable=
     no-member,
     raise-missing-from,
     anomalous-backslash-in-string,
+    todo-comment
 
 enable=
     arguments-differ,
