@@ -23,7 +23,7 @@ disable=
     no-member,
     raise-missing-from,
     anomalous-backslash-in-string,
-    todo-comment
+    fixme
 
 enable=
     arguments-differ,
