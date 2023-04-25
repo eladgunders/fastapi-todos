@@ -1,3 +1,6 @@
+[MESSAGES CONTROL]
+enable=TODO
+
 [MASTER]
 reports=y
 output-format=colorized
