@@ -18,13 +18,17 @@ class Priority(Base):
 class Category(Base):
     id = Column(BigInteger(), primary_key=True, autoincrement=True)
     name = Column(Text(), nullable=False)
-    # Default category are those where created_by_id is NULL,
-    # indicating they are created by the system and are applicable to all users
+    """
+    Default categories are those where created_by_id is NULL,
+    indicating they are created by the system and are applicable to all users
+    """
     created_by_id = Column(GUID, ForeignKey('user.id'))
 
     __table_args__ = (
         UniqueConstraint('name', 'created_by_id', name='unique_category'),
     )
+
+    todos = relationship('Todo', secondary='todo_category', back_populates='categories', viewonly=True)
 
 
 class Todo(Base):
@@ -35,12 +39,16 @@ class Todo(Base):
     priority_id = Column(BigInteger(), ForeignKey('priority.id'), nullable=False)
 
     priority = relationship('Priority', lazy='selectin')
-    todos_categories = relationship('TodoCategory', lazy='selectin')
+    categories = relationship('Category', secondary='todo_category',
+                              back_populates='todos', lazy='selectin', viewonly=True)
+    """
+    just for adding todos_categories when adding a todo
+    """
+    todos_categories = relationship('TodoCategory')
 
 
 class TodoCategory(Base):
+    # TODO: add unique constraint todo_id + category_id
     id = Column(BigInteger(), primary_key=True, autoincrement=True)
     todo_id = Column(BigInteger(), ForeignKey('todo.id'), nullable=False)
     category_id = Column(BigInteger(), ForeignKey('category.id'), nullable=False)
-
-    category = relationship('Category', lazy='selectin')

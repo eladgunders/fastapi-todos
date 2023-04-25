@@ -1,10 +1,10 @@
 import uuid
 from pydantic import BaseModel
-from typing import Optional
 
+from app.schemas.base import BaseInDB
 from app.schemas.priority import PriorityOut
 from app.schemas.category import CategoryOut
-from app.schemas.todo_category import TodoCategoryOut
+from app.models.tables import Todo, TodoCategory
 
 
 class TodoBase(BaseModel):
@@ -15,19 +15,10 @@ class TodoOut(TodoBase):
     id: int
     is_completed: bool
     priority: PriorityOut
-    todos_categories: Optional[list[TodoCategoryOut]]  # exists in the orm model but to part of the instance
-    categories: Optional[list[CategoryOut]]  # not exists in the orm model but part of the instance
+    categories: list[CategoryOut]
 
     class Config:
         orm_mode = True
-
-    @classmethod
-    # removes - todos_categories, adds - categories
-    def from_orm(cls, todo_orm):
-        model = super().from_orm(todo_orm)
-        model.categories = [ct.category for ct in model.todos_categories]
-        delattr(model, 'todos_categories')
-        return model
 
 
 class TodoCreate(TodoBase):
@@ -35,5 +26,19 @@ class TodoCreate(TodoBase):
     categories_ids: list[int]
 
 
-class TodoInDB(TodoCreate):
+class TodoInDB(BaseInDB, TodoCreate):
     created_by_id: uuid.UUID
+    priority_id: int
+
+    class Config(BaseInDB.Config):
+        orm_model = Todo
+
+    def to_orm(self):
+        """
+        converts categories_ids to todos_categories
+        """
+        orm_data = dict(self)
+        categories_ids = orm_data.pop('categories_ids')
+        todo_orm = self.Config.orm_model(**orm_data)
+        todo_orm.todos_categories = [TodoCategory(category_id=c_id) for c_id in categories_ids]
+        return todo_orm
