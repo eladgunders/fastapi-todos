@@ -1,5 +1,9 @@
 import uuid
 from pydantic import BaseModel
+from typing import Optional
+
+from app.schemas.base import BaseInDB
+from app.models.tables import Category as CategoryModel
 
 
 class CategoryCreate(BaseModel):
@@ -13,5 +17,12 @@ class CategoryOut(CategoryCreate):
         orm_mode = True
 
 
-class CategoryInDB(CategoryCreate):
-    created_by_id: uuid.UUID
+class CategoryInDB(BaseInDB, CategoryCreate):
+    created_by_id: Optional[uuid.UUID]
+
+    class Config(BaseInDB.Config):
+        orm_model = CategoryModel
+
+
+class Category(CategoryInDB):
+    id: int

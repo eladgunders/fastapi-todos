@@ -40,10 +40,15 @@ class DBFacade:
     async def get_priorities(self) -> list[Priority]:
         return await self._repo.get_priorities()
 
-    async def get_categories(self, created_by_id: Optional[uuid.UUID]) -> list[Category]:
-        return await self._repo.get_categories(created_by_id)
+    async def get_categories(
+            self,
+            created_by_id: uuid.UUID,
+            categories_ids: Optional[list[int]] = None
+    ) -> list[Category]:
+        return await self._repo.get_categories(created_by_id, categories_ids)
 
     async def add_category(self, category: CategoryInDB) -> Category:
+        # TODO: replace ValueError with ResourceAlreadyExists and handle it in exception_handler
         users_categories: list[Category] = await self.get_categories(category.created_by_id)
         users_categories_names: list[str] = [c.name for c in users_categories]
         if category.name in users_categories_names:
@@ -63,12 +68,11 @@ class DBFacade:
 
     async def add_todo(self, todo: TodoInDB) -> Todo:
         todo_categories_ids: list[int] = todo.categories_ids
-        users_categories: list[Category] = await self.get_categories(todo.created_by_id)
-        user_categories_ids: list[int] = [c.id for c in users_categories]
-        are_categories_valid: bool = all(c_id in user_categories_ids for c_id in todo_categories_ids)
+        todo_categories_from_db: list[Category] = await self.get_categories(todo.created_by_id, todo_categories_ids)
+        are_categories_valid: bool = len(todo_categories_ids) == len(todo_categories_from_db)
         if are_categories_valid:
             try:
                 return await self._repo.add_todo(todo)
             except IntegrityError:
-                raise ValueError('priority does not exists')
-        raise ValueError('not all categories associated with the todo belong to the user')
+                raise ValueError('priority is not valid')
+        raise ValueError('categories are not valid')
