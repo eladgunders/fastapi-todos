@@ -48,7 +48,5 @@ class Todo(Base):
 
 
 class TodoCategory(Base):
-    # TODO: add unique constraint todo_id + category_id
-    id = Column(BigInteger(), primary_key=True, autoincrement=True)
-    todo_id = Column(BigInteger(), ForeignKey('todo.id'), nullable=False)
-    category_id = Column(BigInteger(), ForeignKey('category.id'), nullable=False)
+    todo_id = Column(BigInteger(), ForeignKey('todo.id'), nullable=False, primary_key=True)
+    category_id = Column(BigInteger(), ForeignKey('category.id'), nullable=False, primary_key=True)
