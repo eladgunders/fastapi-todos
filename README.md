@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Todos Back ✨</h1>
+  <h1>FastApi Todos✨</h1>
   <p>FastApi 🚀 • PostgreSQL 🐘 • SQLAlchemy 💠 • FastApiUsers 👥</p>
 </div>
 
