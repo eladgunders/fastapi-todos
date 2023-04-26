@@ -1,6 +1,7 @@
 import threading
-from typing import Optional
 import uuid
+from typing import Optional
+
 from sqlalchemy.exc import IntegrityError
 
 from app.dao.sql_manager import SQLManager

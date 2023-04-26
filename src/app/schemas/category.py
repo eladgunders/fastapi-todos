@@ -1,6 +1,7 @@
 import uuid
-from pydantic import BaseModel
 from typing import Optional
+
+from pydantic import BaseModel
 
 from app.schemas.base import BaseInDB
 from app.models.tables import Category

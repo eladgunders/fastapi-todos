@@ -1,11 +1,12 @@
 import uuid
 from asyncio import current_task
+from typing import Optional, Type, TypeVar
+
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, AsyncEngine, \
     async_scoped_session
 from sqlalchemy.engine.result import Result
-from sqlalchemy import select, delete, or_, and_
 from sqlalchemy.orm import sessionmaker
-from typing import Optional, Type, TypeVar
+from sqlalchemy import select, delete, or_, and_
 
 from app.models.base import Base
 from app.models.tables import Category, Priority, Todo

@@ -1,5 +1,6 @@
-import humps
 from typing import Any
+
+import humps
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from sqlalchemy import inspect
 
