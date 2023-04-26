@@ -1,6 +1,6 @@
 <div align="center">
-  <h1>FastApi Todos✨</h1>
-  <p>FastApi 🚀 • PostgreSQL 🐘 • SQLAlchemy 💠 • FastApiUsers 👥</p>
+  <h1>FastAPI Todos✨</h1>
+  <p>FastAPI 🚀 • PostgreSQL 🐘 • SQLAlchemy 💠 • FastAPIUsers 👥</p>
 </div>
 
 ## Introduction
@@ -12,10 +12,10 @@ The app provides a fully async backend web server for to-do apps.
 
 This project combines the following:
 
-- [`FastApi`](https://fastapi.tiangolo.com/) for the fast speed web-server and data validation at runtime.
+- [`FastAPI`](https://fastapi.tiangolo.com/) for the fast speed web-server and data validation at runtime.
 - [`PostgreSQL`](https://www.postgresql.org/) as the database management system (DBMS).
 - [`SQLAlchemy`](https://www.sqlalchemy.org/) as the object relational mapper (ORM).
-- [`FastApiUsers`](https://fastapi-users.github.io/fastapi-users/) for registration and authentication system.
+- [`FastAPIUsers`](https://fastapi-users.github.io/fastapi-users/) for registration and authentication system.
 
 ... and some [more stuff](./requirements.txt).
 
@@ -42,7 +42,7 @@ Create .env file
 
     $ touch .env
 
-Fill the following content with your configuration and Paste it into the file:
+Fill the following content with your configuration and paste it into the file:
 ```dotenv
 DB_CONN_STR=postgresql+asyncpg://<username>:<password>@<hostname>:5432/<db_name>
 ORIGINS=http://localhost:3000;http://127.0.0.1:8000
