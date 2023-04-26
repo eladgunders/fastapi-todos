@@ -7,7 +7,7 @@ from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category, Todo
 from app.schemas import CategoryInDB, TodoInDB
 from app.core.config import get_config
-from app.utils.exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
+from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
 
 
 class DBFacade:
