@@ -1,12 +1,11 @@
 import uuid
-from typing import Optional
+from typing import Optional, Final
 from fastapi import Request
 from fastapi_users import BaseUserManager, UUIDIDMixin
 from fastapi_users.authentication import AuthenticationBackend, JWTStrategy, BearerTransport
 from fastapi_users.jwt import SecretType, generate_jwt
 
 from app.core.config import get_config
-from app.constants.auth import JWT_HASHING_ALGORITHM
 from app.models.tables import User
 
 
@@ -29,6 +28,9 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             self, user: User, token: str, request: Optional[Request] = None
     ):
         print(f'Verification requested for user {user.id}. Verification token: {token}')
+
+
+JWT_HASHING_ALGORITHM: Final[str] = 'HS256'
 
 
 class TodosJWTStrategy(JWTStrategy):
