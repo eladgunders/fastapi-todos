@@ -7,7 +7,7 @@ from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category, Todo
 from app.schemas import CategoryInDB, TodoInDB
 from app.core.config import get_config
-from app.utils.exceptions import ResourceNotExists, Forbidden, ResourceAlreadyExists
+from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
 
 
 class DBFacade:
@@ -56,9 +56,9 @@ class DBFacade:
     async def delete_category(self, category_id: int, created_by_id: uuid.UUID) -> None:
         category: Optional[Category] = await self._repo.get_category(category_id)
         if not category:
-            raise ResourceNotExists('category does not exist')
+            raise ResourceNotExists(resource='category')
         if category.created_by_id != created_by_id:
-            raise Forbidden('a user can not delete a category that was not created by him')
+            raise UserNotAllowed('a user can not delete a category that was not created by him')
         await self._repo.delete_category(category_id)
 
     async def get_todos(self, created_by_id: uuid.UUID) -> list[Todo]:

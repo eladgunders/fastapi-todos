@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from app.api.deps import current_logged_user
 from app.dao.db_facade import DBFacade
 from app.schemas import TodoRead, TodoInDB, TodoCreate
-from app.utils.exceptions import exception_handler
+from app.utils import exception_handler
 
 
 router = APIRouter(
