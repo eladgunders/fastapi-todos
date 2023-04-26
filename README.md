@@ -1,11 +1,11 @@
 <div align="center">
   <h1>Todos Back ✨</h1>
-  <p>FastApi 🚀 • PostgreSQL 🐘 • SQLAlchemy 💠  </p>
+  <p>FastApi 🚀 • PostgreSQL 🐘 • SQLAlchemy 💠 • FastApiUsers 👥</p>
 </div>
 
 ## Introduction
 
-The app provides an async backend web server for to-do apps.
+The app provides a fully async backend web server for to-do apps.
 
 
 ## Technologies used
@@ -13,9 +13,9 @@ The app provides an async backend web server for to-do apps.
 This project combines the following:
 
 - [`FastApi`](https://fastapi.tiangolo.com/) for the fast speed web-server and data validation at runtime.
-- [`FastApiUsers`](https://fastapi-users.github.io/fastapi-users/) for registration and authentication system.
 - [`PostgreSQL`](https://www.postgresql.org/) as the database management system (DBMS).
 - [`SQLAlchemy`](https://www.sqlalchemy.org/) as the object relational mapper (ORM).
+- [`FastApiUsers`](https://fastapi-users.github.io/fastapi-users/) for registration and authentication system.
 
 ... and some [more stuff](./requirements.txt).
 
@@ -58,3 +58,7 @@ JWT_LIFETIME_SECONDS=43200
 
 ### Running the dev server
     $ python3 src/main.py
+
+## License
+
+This project is under the MIT license.
