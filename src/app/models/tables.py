@@ -48,5 +48,5 @@ class Todo(Base):
 
 
 class TodoCategory(Base):
-    todo_id = Column(BigInteger(), ForeignKey('todo.id'), nullable=False, primary_key=True)
-    category_id = Column(BigInteger(), ForeignKey('category.id'), nullable=False, primary_key=True)
+    todo_id = Column(BigInteger(), ForeignKey('todo.id', ondelete='CASCADE'), primary_key=True)
+    category_id = Column(BigInteger(), ForeignKey('category.id', ondelete='CASCADE'), primary_key=True)
