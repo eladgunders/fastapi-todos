@@ -4,8 +4,12 @@ from app.models.base import Base
 
 
 class BaseInDB(BaseModel):
+    """
+    base schema for every schema that stored in DB.
+    provides a default to_orm method for converting
+    Pydantic objects to SQLAlchemy objects
+    """
     class Config:
-        orm_mode: bool = True
         orm_model: Union[Type[Base], None] = None
 
     def to_orm(self):

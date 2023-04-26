@@ -2,8 +2,8 @@ import uuid
 from pydantic import BaseModel
 
 from app.schemas.base import BaseInDB
-from app.schemas.priority import PriorityOut
-from app.schemas.category import CategoryOut
+from app.schemas.priority import PriorityRead
+from app.schemas.category import CategoryRead
 from app.models.tables import Todo, TodoCategory
 
 
@@ -11,11 +11,11 @@ class TodoBase(BaseModel):
     content: str
 
 
-class TodoOut(TodoBase):
+class TodoRead(TodoBase):
     id: int
     is_completed: bool
-    priority: PriorityOut
-    categories: list[CategoryOut]
+    priority: PriorityRead
+    categories: list[CategoryRead]
 
     class Config:
         orm_mode = True

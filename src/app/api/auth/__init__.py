@@ -5,7 +5,7 @@ from fastapi_users import FastAPIUsers
 from app.api.auth.deps import get_user_manager
 from app.models.tables import User
 from app.core.security import auth_backend
-from app.schemas.user import UserRead, UserCreate, UserUpdate
+from app.schemas import UserRead, UserCreate, UserUpdate
 
 router = APIRouter(
     prefix='/auth',

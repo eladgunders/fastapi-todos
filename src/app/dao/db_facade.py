@@ -5,8 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category, Todo
-from app.schemas.category import CategoryInDB
-from app.schemas.todo import TodoInDB
+from app.schemas import CategoryInDB, TodoInDB
 from app.core.config import get_config
 from app.utils.exceptions import ResourceNotExists, Forbidden
 
