@@ -1,12 +1,13 @@
 from pydantic import BaseModel
 from typing import Type, Union
+
 from app.models.base import Base
 
 
 class BaseInDB(BaseModel):
     """
     base schema for every schema that stored in DB.
-    provides a default to_orm method for converting
+    provides a default method for converting
     Pydantic objects to SQLAlchemy objects
     """
     class Config:

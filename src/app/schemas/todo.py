@@ -1,4 +1,5 @@
 import uuid
+
 from pydantic import BaseModel
 
 from app.schemas.base import BaseInDB

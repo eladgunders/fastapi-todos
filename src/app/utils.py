@@ -1,6 +1,6 @@
 from typing import Callable, Any
-
 from functools import wraps
+
 from fastapi import status, HTTPException
 
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
