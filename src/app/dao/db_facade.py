@@ -56,7 +56,7 @@ class DBFacade:
     async def delete_category(self, category_id: int, created_by_id: uuid.UUID) -> None:
         category: Optional[Category] = await self._repo.get_category(category_id)
         if not category:
-            raise ResourceNotExists('category does not exist')
+            raise ResourceNotExists(resource='category')
         if category.created_by_id != created_by_id:
             raise Forbidden('a user can not delete a category that was not created by him')
         await self._repo.delete_category(category_id)

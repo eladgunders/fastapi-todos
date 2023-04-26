@@ -4,7 +4,9 @@ from fastapi import status, HTTPException
 
 
 class ResourceNotExists(Exception):
-    pass
+    def __init__(self, *, resource: str):
+        self.msg = f'{resource} does not exist'
+        super().__init__(self.msg)
 
 
 class Forbidden(Exception):
