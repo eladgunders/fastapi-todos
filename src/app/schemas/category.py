@@ -3,14 +3,14 @@ from pydantic import BaseModel
 from typing import Optional
 
 from app.schemas.base import BaseInDB
-from app.models.tables import Category as CategoryModel
+from app.models.tables import Category
 
 
 class CategoryCreate(BaseModel):
     name: str
 
 
-class CategoryOut(CategoryCreate):
+class CategoryRead(CategoryCreate):
     id: int
 
     class Config:
@@ -21,8 +21,4 @@ class CategoryInDB(BaseInDB, CategoryCreate):
     created_by_id: Optional[uuid.UUID]
 
     class Config(BaseInDB.Config):
-        orm_model = CategoryModel
-
-
-class Category(CategoryInDB):
-    id: int
+        orm_model = Category

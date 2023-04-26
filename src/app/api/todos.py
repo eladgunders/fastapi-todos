@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 
 from app.api.deps import current_logged_user
 from app.dao.db_facade import DBFacade
-from app.schemas.todo import TodoOut, TodoInDB, TodoCreate
+from app.schemas.todo import TodoRead, TodoInDB, TodoCreate
 from app.utils.exceptions import exception_handler
 
 
@@ -15,12 +15,12 @@ router = APIRouter(
 db_facade = DBFacade.get_instance()
 
 
-@router.get('', response_model=list[TodoOut])
+@router.get('', response_model=list[TodoRead])
 async def get_todos(user=Depends(current_logged_user)):
     return await db_facade.get_todos(user.id)
 
 
-@router.post('', response_model=TodoOut, status_code=status.HTTP_201_CREATED)
+@router.post('', response_model=TodoRead, status_code=status.HTTP_201_CREATED)
 @exception_handler
 async def add_todo(todo_in: TodoCreate, user=Depends(current_logged_user)):
     todo = TodoInDB(
