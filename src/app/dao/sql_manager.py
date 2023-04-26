@@ -9,8 +9,7 @@ from typing import Optional, Type, TypeVar
 
 from app.models.base import Base
 from app.models.tables import Category, Priority, Todo
-from app.schemas.category import CategoryInDB
-from app.schemas.todo import TodoInDB
+from app.schemas import CategoryInDB, TodoInDB
 
 
 ModelType = TypeVar("ModelType", bound=Base)

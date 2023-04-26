@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, Depends
 
 from app.api.deps import current_logged_user
 from app.dao.db_facade import DBFacade
-from app.schemas.category import CategoryCreate, CategoryRead, CategoryInDB
+from app.schemas import CategoryCreate, CategoryRead, CategoryInDB
 from app.utils.exceptions import exception_handler
 
 router = APIRouter(

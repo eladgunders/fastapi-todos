@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 
 from app.api.deps import current_logged_user
 from app.dao.db_facade import DBFacade
-from app.schemas.priority import PriorityRead
+from app.schemas import PriorityRead
 
 router = APIRouter(
     prefix='/priorities',
