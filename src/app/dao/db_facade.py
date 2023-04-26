@@ -7,7 +7,7 @@ from app.dao.sql_manager import SQLManager
 from app.models.tables import Priority, Category, Todo
 from app.schemas import CategoryInDB, TodoInDB
 from app.core.config import get_config
-from app.utils.exceptions import ResourceNotExists, Forbidden
+from app.utils.exceptions import ResourceNotExists, Forbidden, ResourceAlreadyExists
 
 
 class DBFacade:
@@ -47,11 +47,10 @@ class DBFacade:
         return await self._repo.get_categories(created_by_id, categories_ids)
 
     async def add_category(self, category: CategoryInDB) -> Category:
-        # TODO: replace ValueError with ResourceAlreadyExists and handle it in exception_handler
         users_categories: list[Category] = await self.get_categories(category.created_by_id)
         users_categories_names: list[str] = [c.name for c in users_categories]
         if category.name in users_categories_names:
-            raise ValueError('category name already exists')
+            raise ResourceAlreadyExists(resource='category name')
         return await self._repo.add_category(category)
 
     async def delete_category(self, category_id: int, created_by_id: uuid.UUID) -> None:
