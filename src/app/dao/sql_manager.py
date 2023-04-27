@@ -61,6 +61,9 @@ class SQLManager:
         priorities = await self._read_from_db(query)
         return priorities.scalars().all()
 
+    async def get_category(self, category_id: int) -> Optional[Category]:
+        return await self._get_by_id(category_id, Category)
+
     async def get_categories(
             self,
             created_by_id: uuid.UUID,
@@ -76,14 +79,14 @@ class SQLManager:
         categories = await self._read_from_db(query)
         return categories.scalars().all()
 
-    async def get_category(self, category_id: int) -> Optional[Category]:
-        return await self._get_by_id(category_id, Category)
-
     async def add_category(self, category: CategoryInDB) -> Category:
         return await self._add_one(category.to_orm())
 
     async def delete_category(self, category_id: int) -> None:
         await self._delete_by_id(category_id, Category)
+
+    async def get_todo(self, todo_id: int) -> Optional[Todo]:
+        return await self._get_by_id(todo_id, Todo)
 
     async def get_todos(self, created_by_id: uuid.UUID) -> list[Todo]:
         query_filter = Todo.created_by_id == created_by_id
@@ -93,3 +96,6 @@ class SQLManager:
 
     async def add_todo(self, todo: TodoInDB) -> Todo:
         return await self._add_one(todo.to_orm())
+
+    async def delete_todo(self, todo_id: int) -> None:
+        await self._delete_by_id(todo_id, Todo)
