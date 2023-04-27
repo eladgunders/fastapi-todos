@@ -26,7 +26,7 @@ This project combines the following:
 
 Clone the repository and navigate to its directory:
 
-    git clone https://github.com/eladgunders/todos_back.git
+    git clone https://github.com/eladgunders/fastapi-todos.git
     cd todos_back
 
 Create and activate a virtual environment
