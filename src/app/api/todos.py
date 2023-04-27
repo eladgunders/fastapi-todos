@@ -30,3 +30,9 @@ async def add_todo(todo_in: TodoCreate, user=Depends(current_logged_user)):
         created_by_id=user.id
     )
     return await db_facade.add_todo(todo)
+
+
+@router.delete('/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
+@exception_handler
+async def delete_todo(todo_id: int, user=Depends(current_logged_user)):
+    await db_facade.delete_todo(todo_id, user.id)

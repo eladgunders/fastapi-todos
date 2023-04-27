@@ -75,3 +75,11 @@ class DBFacade:
             except IntegrityError:
                 raise ValueError('priority is not valid')
         raise ValueError('categories are not valid')
+
+    async def delete_todo(self, todo_id: int, created_by_id: uuid.UUID) -> None:
+        todo: Optional[Todo] = await self._repo.get_todo(todo_id)
+        if not todo:
+            raise ResourceNotExists(resource='todo')
+        if todo.created_by_id != created_by_id:
+            raise UserNotAllowed('a user can not delete a todo that was not created by him')
+        await self._repo.delete_todo(todo_id)
