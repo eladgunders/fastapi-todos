@@ -13,9 +13,12 @@ InDBSchemaType = TypeVar("InDBSchemaType", bound=BaseInDB)
 
 class DBRepo:
 
-    @staticmethod
+    def __init__(self):
+        ...
+
     @overload
     async def get(
+        self,
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
@@ -24,9 +27,9 @@ class DBRepo:
     ) -> list[ModelType]:
         ...
 
-    @staticmethod
     @overload
     async def get(
+        self,
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
@@ -35,8 +38,8 @@ class DBRepo:
     ) -> Optional[ModelType]:
         ...
 
-    @staticmethod
     async def get(
+        self,
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
@@ -50,16 +53,25 @@ class DBRepo:
         db_objs = result.scalars()
         return db_objs.all() if multi else db_objs.first()
 
-    @staticmethod
-    async def create(session: AsyncSession, *, obj_to_create: InDBSchemaType) -> ModelType:
+    async def create(
+        self,
+        session: AsyncSession,
+        *,
+        obj_to_create: InDBSchemaType
+    ) -> ModelType:
         db_obj: ModelType = obj_to_create.to_orm()
         session.add(db_obj)
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
 
-    @staticmethod
-    async def delete(session: AsyncSession, *, table_model: Type[ModelType], id_to_delete: int) -> None:
+    async def delete(
+        self,
+        session: AsyncSession,
+        *,
+        table_model: Type[ModelType],
+        id_to_delete: int
+    ) -> None:
         query = delete(table_model).where(table_model.id == id_to_delete)
         await session.execute(query)
         await session.commit()
