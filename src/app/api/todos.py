@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.auth.deps import get_async_session
 from app.api.deps import current_logged_user
-from app.dao import db_facade
+from app.dao import db_service
 from app.schemas import TodoRead, TodoInDB, TodoCreate
 from app.utils import exception_handler
 
@@ -23,7 +23,7 @@ async def get_todos(
     session: AsyncSession = Depends(get_async_session),
     user=Depends(current_logged_user)
 ):
-    return await db_facade.get_todos(session, created_by_id=user.id)
+    return await db_service.get_todos(session, created_by_id=user.id)
 
 
 @router.post('', response_model=TodoRead, status_code=status.HTTP_201_CREATED)
@@ -39,7 +39,7 @@ async def add_todo(
         categories_ids=todo_in.categories_ids,
         created_by_id=user.id
     )
-    return await db_facade.add_todo(session, todo_in=todo_in)
+    return await db_service.add_todo(session, todo_in=todo_in)
 
 
 @router.delete('/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
@@ -49,4 +49,4 @@ async def delete_todo(
     session: AsyncSession = Depends(get_async_session),
     user=Depends(current_logged_user)
 ):
-    await db_facade.delete_todo(session, id_to_delete=todo_id, created_by_id=user.id)
+    await db_service.delete_todo(session, id_to_delete=todo_id, created_by_id=user.id)

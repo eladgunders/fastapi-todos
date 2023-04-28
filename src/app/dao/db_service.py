@@ -11,7 +11,7 @@ from app.schemas import CategoryInDB, TodoInDB
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
 
 
-class DBFacade:
+class DBService:
     _repo = DBRepo()
 
     async def get_priorities(self, session: AsyncSession) -> list[Priority]:
@@ -115,4 +115,4 @@ class DBFacade:
         await self._repo.delete(session, table_model=Todo, id_to_delete=id_to_delete)
 
 
-db_facade = DBFacade()
+db_service = DBService()
