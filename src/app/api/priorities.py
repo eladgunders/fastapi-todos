@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.auth.deps import get_async_session
 from app.api.deps import current_logged_user
-from app.dao.db_facade import DBFacade
+from app.dao import DBFacade
 from app.schemas import PriorityRead
 
 router = APIRouter(
@@ -22,4 +22,4 @@ db_facade = DBFacade.get_instance()
 async def get_priorities(
     session: AsyncSession = Depends(get_async_session)
 ):
-    return await db_facade.get_priorities()
+    return await db_facade.get_priorities(session)

@@ -8,8 +8,7 @@ config = get_config()
 
 engine: AsyncEngine = create_async_engine(config.db_conn_str, echo=True)
 
-Session = sessionmaker(bind=engine, class_=AsyncSession, autoflush=True, expire_on_commit=False,
-                       autocommit=False)
+Session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 
 # creates a table to all classes that inherits from Base
