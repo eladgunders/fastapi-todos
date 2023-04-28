@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.auth.deps import get_async_session
 from app.api.deps import current_logged_user
-from app.dao import DBFacade
+from app.dao import db_facade
 from app.schemas import TodoRead, TodoInDB, TodoCreate
 from app.utils import exception_handler
 
@@ -16,8 +16,6 @@ router = APIRouter(
     ],
     tags=['Todos']
 )
-
-db_facade = DBFacade.get_instance()
 
 
 @router.get('', response_model=list[TodoRead])

@@ -1,5 +1,4 @@
 import uuid
-import threading
 from typing import Optional
 
 from sqlalchemy import or_, and_
@@ -12,27 +11,8 @@ from app.schemas import CategoryInDB, TodoInDB
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
 
 
-# TODO: remove singleton
 class DBFacade:
-    _instance = None
-    _lock = threading.Lock()
-
-    def __init__(self):
-        raise RuntimeError('Call get_instance() instead')
-
-    def __new__(cls):
-        instance = super().__new__(cls)
-        instance._repo = DBRepo()
-        return instance
-
-    @classmethod
-    def get_instance(cls):
-        if cls._instance:
-            return cls._instance
-        with cls._lock:
-            if cls._instance is None:
-                cls._instance = cls.__new__(cls)
-            return cls._instance
+    _repo = DBRepo()
 
     async def get_priorities(self, session: AsyncSession) -> list[Priority]:
         return await self._repo.get(session, table_model=Priority, multi=True)
@@ -133,3 +113,6 @@ class DBFacade:
         if todo_to_delete.created_by_id != created_by_id:
             raise UserNotAllowed('a user can not delete a todo that was not created by him')
         await self._repo.delete(session, table_model=Todo, id_to_delete=id_to_delete)
+
+
+db_facade = DBFacade()
