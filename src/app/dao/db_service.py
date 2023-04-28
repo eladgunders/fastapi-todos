@@ -12,7 +12,9 @@ from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlrea
 
 
 class DBService:
-    _repo = DBRepo()
+
+    def __init__(self):
+        self._repo = DBRepo()
 
     async def get_priorities(self, session: AsyncSession) -> list[Priority]:
         return await self._repo.get(session, table_model=Priority, multi=True)
