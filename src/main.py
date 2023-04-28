@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette import status
 from starlette.responses import JSONResponse
 
-from app import dao
 from app.api import router
 from app.core.config import get_config
 
@@ -27,16 +26,7 @@ app.add_middleware(
 app.include_router(router)
 
 
-@app.on_event('startup')
-def startup():
-    dao.connect_to_databases()
-
-
-@app.on_event('shutdown')
-async def shutdown():
-    await dao.disconnect_from_databases()
-
-
+# TODO: check if necessary
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(_: Request, exc: RequestValidationError):
     return JSONResponse(

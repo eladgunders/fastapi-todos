@@ -5,12 +5,10 @@ from app.core.config import get_config
 from app.models.tables import Base
 
 config = get_config()
-connection_string = config.db_conn_str
 
-engine: AsyncEngine = create_async_engine(connection_string, echo=True)
+engine: AsyncEngine = create_async_engine(config.db_conn_str, echo=True)
 
-Session = sessionmaker(bind=engine, class_=AsyncSession, autoflush=True, expire_on_commit=False,
-                       autocommit=False)
+Session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 
 # creates a table to all classes that inherits from Base

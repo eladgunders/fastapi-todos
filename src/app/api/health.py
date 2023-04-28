@@ -8,7 +8,10 @@ from app.api.auth.deps import get_async_session, get_user_manager
 
 router = APIRouter(
     prefix='/health',
-    dependencies=[Depends(get_async_session), Depends(get_user_manager)],
+    dependencies=[
+        Depends(get_async_session),
+        Depends(get_user_manager)
+    ],
     tags=['Health']
 )
 
