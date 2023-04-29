@@ -55,5 +55,5 @@ jobs:
 
     - name: Test
       run: |
-        pip3 install pytest pytest-asyncio httpx
+        pip3 install pytest pytest-asyncio httpx 'asgi-lifespan==2.*'
         python3 -m pytest .

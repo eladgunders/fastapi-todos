@@ -1,6 +1,7 @@
 import asyncio
 
 import pytest_asyncio
+from asgi_lifespan import LifespanManager
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 
@@ -41,7 +42,7 @@ def event_loop():
 
 @pytest_asyncio.fixture()
 async def client():
-    async with AsyncClient(app=app, base_url='http://test') as ac:
+    async with AsyncClient(app=app, base_url='http://test') as ac, LifespanManager(app):
         yield ac
 
 
@@ -51,7 +52,7 @@ async def user_token_headers(client: AsyncClient) -> dict[str, str]:
         'username': 'user@todos.com',
         'password': 'password',
     }
-    res = await client.post(f'/auth/login', data=login_data)
+    res = await client.post('/auth/login', data=login_data)
     print(res)
     access_token = res.json()["access_token"]
     return {"Authorization": f"Bearer {access_token}"}
