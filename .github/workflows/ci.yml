@@ -55,5 +55,5 @@ jobs:
 
     - name: Test
       run: |
-        pip3 install pytest pytest-asyncio
+        pip3 install pytest pytest-asyncio httpx
         python3 -m pytest .
