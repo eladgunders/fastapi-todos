@@ -48,9 +48,9 @@ jobs:
         python3 -m pylint src __tests__ || pylint-exit --fail-under=1 --error-fail $?
 
     - name: Initiate tables
-    - run: python3 src/init_db.py
+      run: python3 src/init_db.py
 
     - name: Test
-    - run: |
-      pip3 install pytest pytest-asyncio
-      python3 -m pytest .
+      run: |
+        pip3 install pytest pytest-asyncio
+        python3 -m pytest .
