@@ -2,10 +2,11 @@ import asyncio
 import contextlib
 
 from sqlalchemy.ext.asyncio import AsyncSession, AsyncConnection
+from fastapi_users.db import SQLAlchemyUserDatabase
+from app.core.security import UserManager
+from app.models.tables import User
 
 from app.core.db import engine
-from app.api.auth import get_user_manager
-from app.api.auth.deps import get_user_db
 from app.schemas import UserCreate
 from fastapi_users.exceptions import UserAlreadyExists
 
@@ -21,9 +22,17 @@ async def async_session(connection: AsyncConnection):
         yield async_session_
 
 
+async def user_db(async_session: AsyncSession):
+    yield SQLAlchemyUserDatabase(async_session, User)
+
+
+async def user_manager(user_db: SQLAlchemyUserDatabase):
+    yield UserManager(user_db)
+
+
 get_async_session_context = contextlib.asynccontextmanager(async_session)
-get_user_db_context = contextlib.asynccontextmanager(get_user_db)
-get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
+get_user_db_context = contextlib.asynccontextmanager(user_db)
+get_user_manager_context = contextlib.asynccontextmanager(user_manager)
 
 
 async def create_user(user_name: str, password: str = None) -> None:
