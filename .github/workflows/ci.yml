@@ -12,9 +12,9 @@ env:
   POSTGRES_PASSWORD: admin
   POSTGRES_DB: todos_db
   DB_CONN_STR: postgresql+asyncpg://postgres:admin@localhost:5432/todos_db
-  JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-  JWT_LIFETIME_SECONDS: ${{ secrets.JWT_LIFETIME_SECONDS }}
-  PYTHONPATH: ${{ secrets.PYTHONPATH }}
+  JWT_SECRET_KEY: secret
+  JWT_LIFETIME_SECONDS: 600
+  PYTHONPATH: ./src
 
 defaults:
   run:
