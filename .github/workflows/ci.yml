@@ -51,6 +51,6 @@ jobs:
     - run: python3 src/init_db.py
 
     - name: Test
-    command: |
+    - run: |
       pip3 install pytest pytest-asyncio
       python3 -m pytest .
