@@ -3,12 +3,12 @@ import contextlib
 
 from sqlalchemy.ext.asyncio import AsyncSession, AsyncConnection
 from fastapi_users.db import SQLAlchemyUserDatabase
-from app.core.security import UserManager
-from app.models.tables import User
+from fastapi_users.exceptions import UserAlreadyExists
 
 from app.core.db import engine
+from app.core.security import UserManager
+from app.models.tables import User
 from app.schemas import UserCreate
-from fastapi_users.exceptions import UserAlreadyExists
 
 
 async def connection():
