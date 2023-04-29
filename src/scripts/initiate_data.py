@@ -2,7 +2,6 @@ import asyncio
 import contextlib
 
 from sqlalchemy.ext.asyncio import AsyncSession, AsyncConnection
-from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
 from fastapi_users.exceptions import UserAlreadyExists
 
@@ -38,13 +37,14 @@ get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
 
 async def create_user(user_name: str, password: str = None) -> None:
     try:
-        async with get_async_session_context(get_connection) as session:
-            async with get_user_db_context(session) as user_db:
-                async with get_user_manager_context(user_db) as user_manager:
-                    # auto generate password
-                    await user_manager.create(
-                        UserCreate(username=user_name, password=password)
-                    )
+        async with get_connection() as conn:
+            async with get_async_session_context(conn) as session:
+                async with get_user_db_context(session) as user_db:
+                    async with get_user_manager_context(user_db) as user_manager:
+                        # auto generate password
+                        await user_manager.create(
+                            UserCreate(username=user_name, password=password)
+                        )
     except UserAlreadyExists:
         print('User with {user_name} mail address already exists')
 
