@@ -1,7 +1,6 @@
 import asyncio
 
 import pytest_asyncio
-from asgi_lifespan import LifespanManager
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 
@@ -42,7 +41,7 @@ def event_loop():
 
 @pytest_asyncio.fixture()
 async def client():
-    async with AsyncClient(app=app, base_url='http://test') as ac, LifespanManager(app):
+    async with AsyncClient(app=app, base_url='http://test') as ac:
         yield ac
 
 
