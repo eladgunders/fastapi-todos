@@ -8,7 +8,7 @@ on:
       - main
 
 env:
-  DB_CONN_STR: postgresql+asyncpg://postgres:admin@localhost:5432/todos_db
+  DB_CONN_STR: postgresql+asyncpg://user:password@localhost:5432/todos_db
   ORIGINS: http://127.0.0.1:8000
   JWT_SECRET_KEY: secret
   JWT_LIFETIME_SECONDS: 600
