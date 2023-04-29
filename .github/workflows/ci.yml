@@ -46,9 +46,11 @@ jobs:
         python3 -m pylint src __tests__ || pylint-exit --fail-under=1 --error-fail $?
 
     - name: Create tables
+      working-directory: .
       run: python3 src/scripts/init_db.py
 
     - name: Create initial data
+      working-directory: .
       run: python3 src/scripts/initial_data.py
 
     - name: Test
