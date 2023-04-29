@@ -36,15 +36,14 @@ get_user_db_context = contextlib.asynccontextmanager(get_user_db)
 get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
 
 
-async def create_user(user_name: str, password: str = None) -> None:
+async def create_user(email: str, password: str = None) -> None:
     try:
         async with get_async_connection_context() as conn:
             async with get_async_session_context(conn) as session:
                 async with get_user_db_context(session) as user_db:
                     async with get_user_manager_context(user_db) as user_manager:
-                        # auto generate password
                         await user_manager.create(
-                            UserCreate(username=user_name, password=password)
+                            UserCreate(email=email, password=password)
                         )
     except UserAlreadyExists:
         print('User with {user_name} mail address already exists')
@@ -53,6 +52,6 @@ async def create_user(user_name: str, password: str = None) -> None:
 if __name__ == '__main__':
     loop = asyncio.get_event_loop()
     loop.run_until_complete(create_user(
-        user_name='username',
+        email='user@todos.com',
         password='password'
     ))

@@ -49,8 +49,8 @@ async def client():
 @pytest_asyncio.fixture()
 async def user_token_headers(client: AsyncClient) -> dict[str, str]:
     login_data = {
-        'username': 'elad@nice.com',
-        'password': '1234',
+        'username': 'user@todos.com',
+        'password': 'password',
     }
     res = await client.post(f'/auth/login', data=login_data)
     print(res)
