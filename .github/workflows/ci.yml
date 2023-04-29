@@ -11,15 +11,11 @@ env:
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: admin
   POSTGRES_DB: todos_db
-  DB_CONN_STR: postgresql+asyncpg://postgres:admin@5432:5432/todos_db
+  DB_CONN_STR: postgresql+asyncpg://postgres:admin@localhost:5432/todos_db
   ORIGINS: http://127.0.0.1:8000
   JWT_SECRET_KEY: secret
   JWT_LIFETIME_SECONDS: 600
   PYTHONPATH: ./src
-
-defaults:
-  run:
-    working-directory: /
 
 jobs:
   ci:
@@ -40,22 +36,21 @@ jobs:
         python-version: 3.9
 
     - name: Install dependencies
-      working-directory: .
       run: |
         pip3 install -r requirements.txt
 
     - name: Analysing the code with pylint
-      working-directory: .
       run: |
         pip3 install pylint pylint-pydantic pylint_pytest_plugin pylint-exit
         python3 -m pylint src __tests__ || pylint-exit --fail-under=1 --error-fail $?
 
-    - name: Initiate tables
-      working-directory: .
-      run: python3 src/init_db.py
+    - name: Create tables
+      run: python3 src/scripts/init_db.py
+
+    - name: Create initial data
+      run: python3 src/scripts/initial_data.py
 
     - name: Test
-      working-directory: .
       run: |
         pip3 install pytest pytest-asyncio
         python3 -m pytest .
