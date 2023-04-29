@@ -31,7 +31,7 @@ jobs:
           - 5432:5432
     steps:
     - name: Checkout working branch
-    - uses: actions/checkout@v3
+      uses: actions/checkout@v3
 
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
