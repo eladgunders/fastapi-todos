@@ -18,16 +18,16 @@ async def get_connection():
         await conn.rollback()
 
 
-async def get_async_session(connection: AsyncConnection = Depends(get_connection)):
+async def get_async_session(connection: AsyncConnection = get_connection()):
     async with AsyncSession(connection, expire_on_commit=False) as async_session_:
         yield async_session_
 
 
-async def get_user_db(async_session: AsyncSession = Depends(get_async_session)):
+async def get_user_db(async_session: AsyncSession = get_async_session()):
     yield SQLAlchemyUserDatabase(async_session, User)
 
 
-async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
+async def get_user_manager(user_db: SQLAlchemyUserDatabase = get_user_db()):
     yield UserManager(user_db)
 
 
