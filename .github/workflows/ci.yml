@@ -8,9 +8,6 @@ on:
       - main
 
 env:
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: admin
-  POSTGRES_DB: todos_db
   DB_CONN_STR: postgresql+asyncpg://postgres:admin@localhost:5432/todos_db
   ORIGINS: http://127.0.0.1:8000
   JWT_SECRET_KEY: secret
@@ -24,6 +21,10 @@ jobs:
     services:
       postgres:
         image: postgres:13
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: app
         ports:
           - 5432:5432
     steps:
