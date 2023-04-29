@@ -1,0 +1,56 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: admin
+  POSTGRES_DB: todos_db
+  DB_CONN_STR: postgresql+asyncpg://postgres:admin@localhost:5432/todos_db
+  JWT_SECRET_KEY: ${{ secrets.JWT_LIFETIME_SECONDS }}
+  JWT_LIFETIME_SECONDS: ${{ secrets.JWT_LIFETIME_SECONDS }}
+  PYTHONPATH: ${{ secrets.PYTHONPATH }}
+
+defaults:
+  run:
+    working-directory: /
+
+jobs:
+  ci:
+    name: Setup
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432:5432
+    steps:
+    - name: Checkout working branch
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        pip3 install -r requirements.txt
+
+    - name: Analysing the code with pylint
+      run: |
+        pip3 install pylint pylint-pydantic pylint_pytest_plugin pylint-exit
+        python3 -m pylint src __tests__ || pylint-exit --fail-under=1 --error-fail $?
+
+    - name: Initiate tables
+    - run: python3 src/init_db.py
+
+    - name: Test
+    command: |
+      pip3 install pytest pytest-asyncio
+      python3 -m pytest .
