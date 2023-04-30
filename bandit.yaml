@@ -1,1 +1,1 @@
-exclude_dirs: ['todos/tests', 'venv396']
+exclude_dirs: ['todos/tests']
