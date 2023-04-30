@@ -1,4 +1,4 @@
-from typing import Optional, Type, TypeVar, Union, overload
+from typing import Optional, Type, TypeVar, Union, Final
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
@@ -10,48 +10,45 @@ from app.schemas import BaseInDB
 ModelType = TypeVar('ModelType', bound=Base)
 InDBSchemaType = TypeVar('InDBSchemaType', bound=BaseInDB)
 
+GET_MULTI_DEFAULT_SKIP: Final[int] = 0
+GET_MULTI_DEFAULT_LIMIT: Final[int] = 100
+
 
 class DBRepo:
 
     def __init__(self):
         ...
 
-    @overload
     async def get(
         self,
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
-        query_filter=None,
-        multi=True
-    ) -> list[ModelType]:
-        ...
-
-    @overload
-    async def get(
-        self,
-        session: AsyncSession,
-        *,
-        table_model: Type[ModelType],
-        query_filter=None,
-        multi=False
-    ) -> Optional[ModelType]:
-        ...
-
-    async def get(
-        self,
-        session: AsyncSession,
-        *,
-        table_model: Type[ModelType],
-        query_filter=None,
-        multi: bool = False
+        query_filter=None
     ) -> Union[Optional[ModelType], list[ModelType]]:
         query = select(table_model)
         if query_filter is not None:
             query = query.filter(query_filter)
         result = await session.execute(query)
         db_objs = result.scalars()
-        return db_objs.all() if multi else db_objs.first()
+        return db_objs.first()
+
+    async def get_multi(
+        self,
+        session: AsyncSession,
+        *,
+        table_model: Type[ModelType],
+        query_filter=None,
+        skip: int = GET_MULTI_DEFAULT_SKIP,
+        limit: int = GET_MULTI_DEFAULT_LIMIT
+    ) -> list[ModelType]:
+        query = select(table_model)
+        if query_filter is not None:
+            query = query.filter(query_filter)
+        query = query.offset(skip).limit(limit)
+        result = await session.execute(query)
+        db_objs = result.scalars()
+        return db_objs.all()
 
     async def create(
         self,
