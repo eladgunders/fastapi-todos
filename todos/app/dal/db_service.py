@@ -18,7 +18,7 @@ class DBService:
         self._repo = DBRepo()
 
     async def get_priorities(self, session: AsyncSession) -> list[Priority]:
-        return await self._repo.get(session, table_model=Priority)
+        return await self._repo.get_multi(session, table_model=Priority)
 
     async def get_categories(
         self,
