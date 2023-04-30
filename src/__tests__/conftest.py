@@ -13,6 +13,9 @@ from app.core.db import engine
 from main import app
 from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, INITIAL_DATA_FILE_PATH
 
+with open(INITIAL_DATA_FILE_PATH, 'r') as f:
+    initial_data_dict: dict[str, list[dict]] = json.load(f)
+
 
 @pytest_asyncio.fixture()
 async def connection():
@@ -60,13 +63,9 @@ async def user_token_headers(client: AsyncClient) -> dict[str, str]:
 
 @pytest.fixture()
 def get_initial_priorities() -> list[dict[str, Union[int, str]]]:
-    with open(INITIAL_DATA_FILE_PATH, 'r') as f:
-        initial_data_dict: dict[str, list[dict]] = json.load(f)
     return initial_data_dict['priorities']
 
 
 @pytest.fixture()
 def get_initial_categories() -> list[dict[str, Union[int, str]]]:
-    with open(INITIAL_DATA_FILE_PATH, 'r') as f:
-        initial_data_dict: dict[str, list[dict]] = json.load(f)
     return initial_data_dict['categories']
