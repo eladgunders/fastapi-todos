@@ -2,10 +2,10 @@ import asyncio
 import json
 from typing import Union
 
-import pytest  # pylint: disable=import-error
+import pytest
 from httpx import AsyncClient  # pylint: disable=import-error
 from asgi_lifespan import LifespanManager  # pylint: disable=import-error
-import pytest_asyncio
+import pytest_asyncio  # pylint: disable=import-error
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 
 from app.api.auth.deps import get_async_session
