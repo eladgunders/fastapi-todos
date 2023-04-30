@@ -21,7 +21,6 @@ async def create_user(email: str, password: str = None) -> None:
                     await user_manager.create(
                         UserCreate(email=email, password=password)
                     )
-            session.add()
     except UserAlreadyExists:
         print('User with {user_name} mail address already exists')
 
