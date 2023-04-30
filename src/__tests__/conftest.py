@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 from app.api.auth.deps import get_async_session
 from app.core.db import engine
 from main import app
-from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, INITIAL_DATA_FILE_PATH
+from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_BASE_URL, INITIAL_DATA_FILE_PATH
 
 
 with open(INITIAL_DATA_FILE_PATH, 'r') as f:
@@ -46,7 +46,7 @@ def event_loop():
 
 @pytest_asyncio.fixture()
 async def client():
-    async with AsyncClient(app=app, base_url='http://test') as ac, LifespanManager(app):
+    async with AsyncClient(app=app, base_url=TEST_BASE_URL) as ac, LifespanManager(app):
         yield ac
 
 
