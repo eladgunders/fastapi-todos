@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 from app.api.auth.deps import get_async_session
 from app.core.db import engine
 from app.main import app
-from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_BASE_URL, INITIAL_DATA_FILE_PATH
+from tests.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_BASE_URL, INITIAL_DATA_FILE_PATH
 
 
 with open(INITIAL_DATA_FILE_PATH, 'r') as f:

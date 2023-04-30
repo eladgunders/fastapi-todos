@@ -5,7 +5,7 @@ from fastapi_users.exceptions import UserAlreadyExists
 
 from app.api.auth.deps import get_async_session, get_user_db, get_user_manager
 from app.schemas import UserCreate
-from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD
+from tests.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD
 
 
 get_async_session_context = contextlib.asynccontextmanager(get_async_session)
