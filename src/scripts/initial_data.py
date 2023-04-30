@@ -8,7 +8,7 @@ from app.models.tables import Priority, Category
 
 
 async def initiate_data(session: AsyncSession) -> None:
-    with open('scripts/initial_data.json', 'r') as f:
+    with open('src/scripts/initial_data.json', 'r') as f:
         initial_data_dict: dict[str, list[dict]] = json.load(f)
     priorities: list[Priority] = [
         Priority(name=p['name']) for p in initial_data_dict['priorities']
