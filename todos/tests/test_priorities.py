@@ -1,5 +1,5 @@
 import pytest
-from httpx import AsyncClient  # pylint: disable=import-error
+from httpx import AsyncClient
 
 
 @pytest.mark.asyncio
