@@ -14,7 +14,7 @@ from app.main import app
 from tests.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_BASE_URL, INITIAL_DATA_FILE_PATH
 
 
-with open(INITIAL_DATA_FILE_PATH, 'r') as f:
+with open(INITIAL_DATA_FILE_PATH, 'r', encoding='utf-8') as f:
     initial_data: dict[str, list[dict[str, Union[int, str]]]] = json.load(f)
 
 
@@ -26,13 +26,13 @@ async def connection():
 
 
 @pytest_asyncio.fixture()
-async def async_session(connection: AsyncConnection):
+async def async_session(connection: AsyncConnection):  # pylint: disable=redefined-outer-name
     async with AsyncSession(connection, expire_on_commit=False) as async_session_:
         yield async_session_
 
 
 @pytest_asyncio.fixture(autouse=True)
-async def override_dependency(async_session: AsyncSession):
+async def override_dependency(async_session: AsyncSession):  # pylint: disable=redefined-outer-name
     app.dependency_overrides[get_async_session] = lambda: async_session
 
 
@@ -51,7 +51,7 @@ async def client():
 
 
 @pytest_asyncio.fixture()
-async def user_token_headers(client: AsyncClient) -> dict[str, str]:
+async def user_token_headers(client: AsyncClient) -> dict[str, str]:  # pylint: disable=redefined-outer-name
     login_data = {
         'username': TEST_USER_EMAIL,
         'password': TEST_USER_PASSWORD,
