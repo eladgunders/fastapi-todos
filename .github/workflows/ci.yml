@@ -1,0 +1,61 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  DB_CONN_STR: postgresql+asyncpg://user:password@localhost:5432/app
+  ORIGINS: http://127.0.0.1:8000
+  JWT_SECRET_KEY: secret
+  JWT_LIFETIME_SECONDS: 600
+  PYTHONPATH: ./src
+
+jobs:
+  ci:
+    name: Setup
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: app
+        ports:
+          - 5432:5432
+    steps:
+    - name: Checkout working branch
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.9
+
+    - name: Install dependencies
+      run: |
+        pip3 install -r requirements.txt
+
+    - name: Analysing the code with pylint
+      run: |
+        pip3 install pylint pylint-pydantic pylint_pytest_plugin pylint-exit
+        python3 -m pylint src __tests__ || pylint-exit --fail-under=1 --error-fail $?
+
+    - name: Create tables
+      working-directory: .
+      run: python3 src/scripts/init_db.py
+
+    - name: Create initial data
+      working-directory: .
+      run: |
+        python3 src/__tests__/scripts/initiate_test_user.py
+        python3 src/scripts/initial_data.py
+
+    - name: Test
+      run: |
+        pip3 install pytest pytest-asyncio httpx 'asgi-lifespan==2.*'
+        python3 -m pytest .
