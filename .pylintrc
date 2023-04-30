@@ -5,7 +5,7 @@ msg-template="{path}:{line},{column}: {msg_id}: {msg} ({symbol})"
 
 max-line-length=120
 max-returns=7
-ignore=third_party,__tests__
+ignore=third_party,tests
 
 load-plugins=
     pylint_pydantic,
