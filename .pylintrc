@@ -59,4 +59,4 @@ enable=
     useless-import-alias,
     useless-suppression,
 
-init-hook='import sys; sys.path.append("src")'
+init-hook='import sys; sys.path.append("todos")'
