@@ -14,7 +14,7 @@ from app.main import app
 from tests.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_BASE_URL, INITIAL_DATA_FILE_PATH
 
 
-with open(INITIAL_DATA_FILE_PATH, 'r', encoding='utf-8') as f:
+with open(INITIAL_DATA_FILE_PATH, 'r') as f:
     initial_data: dict[str, list[dict[str, Union[int, str]]]] = json.load(f)
 
 
