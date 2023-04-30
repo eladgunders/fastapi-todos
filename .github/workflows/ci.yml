@@ -51,7 +51,9 @@ jobs:
 
     - name: Create initial data
       working-directory: .
-      run: python3 src/scripts/initiate_data.py
+      run: |
+        python3 src/scripts/initiate_test_user.py
+        python3 src/scripts/initial_data.py
 
     - name: Test
       run: |

@@ -6,12 +6,9 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 
 from app.api.auth.deps import get_async_session
-from app.core.config import get_config
 from app.core.db import engine
 from main import app
-
-
-config = get_config()
+from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD
 
 
 @pytest_asyncio.fixture()
@@ -49,10 +46,10 @@ async def client():
 @pytest_asyncio.fixture()
 async def user_token_headers(client: AsyncClient) -> dict[str, str]:
     login_data = {
-        'username': 'user@todos.com',
-        'password': 'password',
+        'username': TEST_USER_EMAIL,
+        'password': TEST_USER_PASSWORD,
     }
     res = await client.post('/auth/login', data=login_data)
     print(res.json())
-    access_token = res.json()["access_token"]
-    return {"Authorization": f"Bearer {access_token}"}
+    access_token = res.json()['access_token']
+    return {'Authorization': f'Bearer {access_token}'}
