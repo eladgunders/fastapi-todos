@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.auth.deps import get_async_session
 from app.api.deps import current_logged_user
-from app.dal import db_service
+from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
 from app.schemas import CategoryCreate, CategoryRead, CategoryInDB
 from app.utils import exception_handler
 
@@ -19,10 +19,17 @@ router = APIRouter(
 
 @router.get('', response_model=list[CategoryRead])
 async def get_categories(
+    skip: int = GET_MULTI_DEFAULT_SKIP,
+    limit: int = GET_MULTI_DEFAULT_LIMIT,
     session: AsyncSession = Depends(get_async_session),
     user=Depends(current_logged_user)
 ):
-    return await db_service.get_categories(session, created_by_id=user.id)
+    return await db_service.get_categories(
+        session,
+        created_by_id=user.id,
+        skip=skip,
+        limit=limit
+    )
 
 
 @router.post('', response_model=CategoryRead, status_code=status.HTTP_201_CREATED)

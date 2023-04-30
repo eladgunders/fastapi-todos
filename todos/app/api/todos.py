@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.auth.deps import get_async_session
 from app.api.deps import current_logged_user
-from app.dal import db_service
+from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
 from app.schemas import TodoRead, TodoInDB, TodoCreate
 from app.utils import exception_handler
 
@@ -20,10 +20,17 @@ router = APIRouter(
 
 @router.get('', response_model=list[TodoRead])
 async def get_todos(
+    skip: int = GET_MULTI_DEFAULT_SKIP,
+    limit: int = GET_MULTI_DEFAULT_LIMIT,
     session: AsyncSession = Depends(get_async_session),
     user=Depends(current_logged_user)
 ):
-    return await db_service.get_todos(session, created_by_id=user.id)
+    return await db_service.get_todos(
+        session,
+        created_by_id=user.id,
+        skip=skip,
+        limit=limit
+    )
 
 
 @router.post('', response_model=TodoRead, status_code=status.HTTP_201_CREATED)

@@ -1,11 +1,12 @@
 import uuid
 from typing import Optional
+import sys
 
 from sqlalchemy import or_, and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.dal.db_repo import DBRepo
+from app.dal.db_repo import DBRepo, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
 from app.models.tables import Priority, Category, Todo
 from app.schemas import CategoryInDB, TodoInDB
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
@@ -17,18 +18,26 @@ class DBService:
         self._repo = DBRepo()
 
     async def get_priorities(self, session: AsyncSession) -> list[Priority]:
-        return await self._repo.get(session, table_model=Priority, multi=True)
+        return await self._repo.get(session, table_model=Priority)
 
     async def get_categories(
         self,
         session: AsyncSession,
         *,
         created_by_id: uuid.UUID,
+        skip: int = GET_MULTI_DEFAULT_SKIP,
+        limit: int = GET_MULTI_DEFAULT_LIMIT
     ) -> list[Category]:
         default_categories_filter = Category.created_by_id.is_(None)
         user_categories_filter = Category.created_by_id == created_by_id
         query_filter = or_(user_categories_filter, default_categories_filter)
-        return await self._repo.get(session, table_model=Category, query_filter=query_filter, multi=True)
+        return await self._repo.get_multi(
+            session,
+            table_model=Category,
+            query_filter=query_filter,
+            limit=limit,
+            skip=skip
+        )
 
     async def add_category(
         self,
@@ -36,7 +45,11 @@ class DBService:
         *,
         category_in: CategoryInDB
     ) -> Category:
-        users_categories: list[Category] = await self.get_categories(session, created_by_id=category_in.created_by_id)
+        users_categories: list[Category] = await self.get_categories(
+            session,
+            created_by_id=category_in.created_by_id,
+            limit=sys.maxsize  # no limit
+        )
         users_categories_names: list[str] = [c.name for c in users_categories]
         if category_in.name in users_categories_names:
             raise ResourceAlreadyExists(resource='category name')
@@ -50,7 +63,8 @@ class DBService:
         created_by_id: uuid.UUID
     ) -> None:
         category_to_delete: Optional[Category] = await self._repo.get(
-            session, table_model=Category,
+            session,
+            table_model=Category,
             query_filter=Category.id == id_to_delete
         )
         if not category_to_delete:
@@ -63,13 +77,16 @@ class DBService:
         self,
         session: AsyncSession,
         *,
-        created_by_id: uuid.UUID
+        created_by_id: uuid.UUID,
+        skip: int = GET_MULTI_DEFAULT_SKIP,
+        limit: int = GET_MULTI_DEFAULT_LIMIT
     ) -> list[Todo]:
-        return await self._repo.get(
+        return await self._repo.get_multi(
             session,
             table_model=Todo,
             query_filter=Todo.created_by_id == created_by_id,
-            multi=True
+            skip=skip,
+            limit=limit
         )
 
     async def add_todo(
@@ -84,11 +101,11 @@ class DBService:
         valid_categories_filter = or_(default_categories_filter, user_categories_filter)
         todo_categories_ids_filter = Category.id.in_(todo_categories_ids)
 
-        valid_todo_categories_from_db: list[Category] = await self._repo.get(
+        valid_todo_categories_from_db: list[Category] = await self._repo.get_multi(
             session,
             table_model=Category,
             query_filter=and_(valid_categories_filter, todo_categories_ids_filter),
-            multi=True
+            limit=sys.maxsize  # no limit
         )
         are_categories_valid: bool = len(todo_categories_ids) == len(valid_todo_categories_from_db)
         if are_categories_valid:
