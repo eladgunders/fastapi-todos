@@ -7,8 +7,8 @@ from app.models.base import Base
 from app.schemas import BaseInDB
 
 
-ModelType = TypeVar("ModelType", bound=Base)
-InDBSchemaType = TypeVar("InDBSchemaType", bound=BaseInDB)
+ModelType = TypeVar('ModelType', bound=Base)
+InDBSchemaType = TypeVar('InDBSchemaType', bound=BaseInDB)
 
 
 class DBRepo:

@@ -22,7 +22,7 @@ async def health(
 ):
     try:
         #  SELECT 1 is a simple SQL query used to test database connectivity
-        await asyncio.wait_for(session.execute("SELECT 1"), timeout=1)
+        await asyncio.wait_for(session.execute('SELECT 1'), timeout=1)
     except (asyncio.TimeoutError, socket.gaierror):
         #  socket.gaierror exception is raised when there is an error resolving a hostname. In this case,
         #  it is being used to handle network-related errors that may occur when attempting to connect to the database
