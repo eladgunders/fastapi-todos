@@ -59,14 +59,14 @@ async def user_token_headers(client: AsyncClient) -> dict[str, str]:
 
 
 @pytest.fixture()
-async def get_initial_priorities() -> list[dict[str, Union[int, str]]]:
+def get_initial_priorities() -> list[dict[str, Union[int, str]]]:
     with open(INITIAL_DATA_FILE_PATH, 'r') as f:
         initial_data_dict: dict[str, list[dict]] = json.load(f)
     return initial_data_dict['priorities']
 
 
 @pytest.fixture()
-async def get_initial_categories() -> list[dict[str, Union[int, str]]]:
+def get_initial_categories() -> list[dict[str, Union[int, str]]]:
     with open(INITIAL_DATA_FILE_PATH, 'r') as f:
         initial_data_dict: dict[str, list[dict]] = json.load(f)
     return initial_data_dict['categories']
