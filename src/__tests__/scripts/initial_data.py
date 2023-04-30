@@ -5,10 +5,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import Session
 from app.models.tables import Priority, Category
+from __tests__.constants import INITIAL_DATA_FILE_PATH
 
 
 async def initiate_data(session: AsyncSession) -> None:
-    with open('src/scripts/initial_data.json', 'r') as f:
+    with open(INITIAL_DATA_FILE_PATH, 'r') as f:
         initial_data_dict: dict[str, list[dict]] = json.load(f)
     priorities: list[Priority] = [
         Priority(name=p['name']) for p in initial_data_dict['priorities']

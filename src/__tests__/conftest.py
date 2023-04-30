@@ -1,5 +1,8 @@
 import asyncio
+import json
+from typing import Union
 
+import pytest
 import pytest_asyncio
 from asgi_lifespan import LifespanManager
 from httpx import AsyncClient
@@ -8,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 from app.api.auth.deps import get_async_session
 from app.core.db import engine
 from main import app
-from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD
+from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, INITIAL_DATA_FILE_PATH
 
 
 @pytest_asyncio.fixture()
@@ -53,3 +56,17 @@ async def user_token_headers(client: AsyncClient) -> dict[str, str]:
     print(res.json())
     access_token = res.json()['access_token']
     return {'Authorization': f'Bearer {access_token}'}
+
+
+@pytest.fixture()
+async def get_initial_priorities() -> list[dict[str, Union[int, str]]]:
+    with open(INITIAL_DATA_FILE_PATH, 'r') as f:
+        initial_data_dict: dict[str, list[dict]] = json.load(f)
+    return initial_data_dict['priorities']
+
+
+@pytest.fixture()
+async def get_initial_categories() -> list[dict[str, Union[int, str]]]:
+    with open(INITIAL_DATA_FILE_PATH, 'r') as f:
+        initial_data_dict: dict[str, list[dict]] = json.load(f)
+    return initial_data_dict['categories']
