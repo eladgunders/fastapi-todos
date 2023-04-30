@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import Session
 from app.models.tables import Priority, Category
-from __tests__.constants import INITIAL_DATA_FILE_PATH
+from tests.constants import INITIAL_DATA_FILE_PATH
 
 
 async def initiate_data(session: AsyncSession) -> None:
