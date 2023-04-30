@@ -5,7 +5,7 @@ from sqlalchemy import or_, and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.dao.db_repo import DBRepo
+from app.dal.db_repo import DBRepo
 from app.models.tables import Priority, Category, Todo
 from app.schemas import CategoryInDB, TodoInDB
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
