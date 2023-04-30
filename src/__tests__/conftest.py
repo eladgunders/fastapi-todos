@@ -15,7 +15,7 @@ from __tests__.constants import TEST_USER_EMAIL, TEST_USER_PASSWORD, TEST_BASE_U
 
 
 with open(INITIAL_DATA_FILE_PATH, 'r') as f:
-    initial_data: dict[str, list[dict]] = json.load(f)
+    initial_data: dict[str, list[dict[str, Union[int, str]]]] = json.load(f)
 
 
 @pytest_asyncio.fixture()
@@ -63,10 +63,10 @@ async def user_token_headers(client: AsyncClient) -> dict[str, str]:
 
 
 @pytest.fixture()
-def get_initial_priorities() -> list[dict[str, Union[int, str]]]:
+def initial_priorities() -> list[dict[str, Union[int, str]]]:
     return initial_data['priorities']
 
 
 @pytest.fixture()
-def get_initial_categories() -> list[dict[str, Union[int, str]]]:
+def initial_categories() -> list[dict[str, Union[int, str]]]:
     return initial_data['categories']

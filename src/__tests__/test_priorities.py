@@ -13,8 +13,8 @@ async def test_priorities_without_credentials(client: AsyncClient):
 async def test_priorities_with_credentials(
     client: AsyncClient,
     user_token_headers: dict[str, str],
-    get_initial_priorities: dict[str, list[dict]]
+    initial_priorities: dict[str, list[dict]]
 ):
     res = await client.get('/priorities', headers=user_token_headers)
     assert res.status_code == 200
-    assert res.json() == get_initial_priorities
+    assert res.json() == initial_priorities
