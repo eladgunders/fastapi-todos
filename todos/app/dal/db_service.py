@@ -5,17 +5,11 @@ from sqlalchemy import or_, and_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.dal.db_repo import DBRepo, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
+from app.dal.db_repo import DBRepo
+from app.dal.constants.constants import GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
 from app.models.tables import Priority, Category, Todo
 from app.schemas import CategoryInDB, TodoInDB
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
-
-
-MAX_LIMIT_GET_MULTI: Final[int] = (2 ** 31) - 1
-"""
-maximum value that can be represented by a 32-bit signed integer.
-it is the postgresql maximum get multi query limit == no limit.
-"""
 
 
 class DBService:
@@ -53,9 +47,7 @@ class DBService:
     ) -> Category:
         users_categories: list[Category] = await self.get_categories(
             session,
-            created_by_id=category_in.created_by_id,
-            limit=MAX_LIMIT_GET_MULTI
-        )
+            created_by_id=category_in.created_by_id)
         users_categories_names: list[str] = [c.name for c in users_categories]
         if category_in.name in users_categories_names:
             raise ResourceAlreadyExists(resource='category name')
@@ -110,8 +102,7 @@ class DBService:
         valid_todo_categories_from_db: list[Category] = await self._repo.get_multi(
             session,
             table_model=Category,
-            query_filter=and_(valid_categories_filter, todo_categories_ids_filter),
-            limit=MAX_LIMIT_GET_MULTI
+            query_filter=and_(valid_categories_filter, todo_categories_ids_filter)
         )
         are_categories_valid: bool = len(todo_categories_ids) == len(valid_todo_categories_from_db)
         if are_categories_valid:
