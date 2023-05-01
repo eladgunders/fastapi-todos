@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional, Final
+from typing import Optional
 
 from sqlalchemy import or_, and_
 from sqlalchemy.exc import IntegrityError
