@@ -1,17 +1,15 @@
-from typing import Optional, Type, TypeVar, Union, Final
+from typing import Optional, Type, TypeVar, Union
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 
 from app.models.base import Base
 from app.schemas import BaseInDB
+from app.dal.constants import GET_MULTI_DEFAULT_SKIP
 
 
 ModelType = TypeVar('ModelType', bound=Base)
 InDBSchemaType = TypeVar('InDBSchemaType', bound=BaseInDB)
-
-GET_MULTI_DEFAULT_SKIP: Final[int] = 0
-GET_MULTI_DEFAULT_LIMIT: Final[int] = 100
 
 
 class DBRepo:
@@ -24,7 +22,7 @@ class DBRepo:
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
-        query_filter=None
+        query_filter: Optional = None
     ) -> Union[Optional[ModelType], list[ModelType]]:
         query = select(table_model)
         if query_filter is not None:
@@ -38,14 +36,16 @@ class DBRepo:
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
-        query_filter=None,
+        query_filter: Optional = None,
         skip: int = GET_MULTI_DEFAULT_SKIP,
-        limit: int = GET_MULTI_DEFAULT_LIMIT
+        limit: Optional[int] = None
     ) -> list[ModelType]:
         query = select(table_model)
         if query_filter is not None:
             query = query.filter(query_filter)
-        query = query.offset(skip).limit(limit)
+        query = query.offset(skip)
+        if limit is not None:
+            query = query.limit(limit)
         result = await session.execute(query)
         db_objs = result.scalars()
         return db_objs.all()
