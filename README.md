@@ -3,12 +3,16 @@
   <p>FastAPI 🚀 • PostgreSQL 🐘 • SQLAlchemy 💠 • FastAPIUsers 👥</p>
 </div>
 
+> **Note**
+> 
+> This project is currently under development
+
 ## Introduction
 
 The app provides a fully async backend web server for to-do apps.
 
 
-## Technologies used
+## Technologies Used
 
 This project combines the following:
 
@@ -20,14 +24,14 @@ This project combines the following:
 ... and some [more stuff](./requirements.txt).
 
 
-## Running locally
+## Running Locally
 
 ### Setting up the project
 
 Clone the repository and navigate to its directory:
 
     git clone https://github.com/eladgunders/fastapi-todos.git
-    cd todos_back
+    cd fastapi-todos
 
 Create and activate a virtual environment
 
@@ -36,7 +40,7 @@ Create and activate a virtual environment
 
 Install requirements:
 
-    $ pip3 install -r requirements.txt
+    $ pip install -r requirements.txt
 
 Create .env file
 
@@ -50,14 +54,26 @@ JWT_SECRET_KEY=<your-secret-key>
 JWT_LIFETIME_SECONDS=43200
 ```
 
-> **Warning**
-> This project requires a running instance of PostgreSQL to function properly
+Set up the Python environment
 
-### Initiating the database tables
-    $ python3 src/init_db.py
+    $ export PYTHONPATH=./todos
+
+### Initiating the database
+
+> **Note**
+> 
+> This project is currently requires a running instance of PostgreSQL to function properly
+
+Initiate the tables
+
+    $ python todos/scripts/init_db.py
+    
+Initiate base data
+
+    $ python todos/scripts/initial_data.py
 
 ### Running the dev server
-    $ python3 src/main.py
+    $ python todos/app/main.py
 
 ## License
 
