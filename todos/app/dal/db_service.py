@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.dal.db_repo import DBRepo
-from app.dal.constants.constants import GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
+from app.dal.constants import GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
 from app.models.tables import Priority, Category, Todo
 from app.schemas import CategoryInDB, TodoInDB
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists

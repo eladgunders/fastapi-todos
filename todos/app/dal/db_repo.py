@@ -5,7 +5,7 @@ from sqlalchemy import select, delete
 
 from app.models.base import Base
 from app.schemas import BaseInDB
-from app.dal.constants.constants import GET_MULTI_DEFAULT_SKIP
+from app.dal.constants import GET_MULTI_DEFAULT_SKIP
 
 
 ModelType = TypeVar('ModelType', bound=Base)
