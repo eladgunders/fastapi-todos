@@ -22,7 +22,7 @@ class DBRepo:
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
-        query_filter=None
+        query_filter: Optional = None
     ) -> Union[Optional[ModelType], list[ModelType]]:
         query = select(table_model)
         if query_filter is not None:
@@ -36,7 +36,7 @@ class DBRepo:
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
-        query_filter=None,
+        query_filter: Optional = None,
         skip: int = GET_MULTI_DEFAULT_SKIP,
         limit: Optional[int] = None
     ) -> list[ModelType]:
