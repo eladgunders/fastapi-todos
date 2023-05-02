@@ -6,7 +6,7 @@ from app.models.tables import Base
 
 config = get_config()
 
-engine: AsyncEngine = create_async_engine(config.db_conn_str, echo=True)
+engine: AsyncEngine = create_async_engine(config.POSTGRES_URI, echo=True)
 
 Session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 

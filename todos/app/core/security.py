@@ -14,8 +14,8 @@ config = get_config()
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
-    reset_password_token_secret = config.jwt_secret_key
-    verification_token_secret = config.jwt_secret_key
+    reset_password_token_secret = config.JWT_SECRET_KEY.get_secret_value()
+    verification_token_secret = config.JWT_SECRET_KEY.get_secret_value()
 
     async def on_after_register(self, user: User, request: Optional[Request] = None):
         print(f'User {user.id} has registered.')
@@ -62,8 +62,8 @@ class TodosJWTStrategy(JWTStrategy):
 
 def get_jwt_strategy() -> JWTStrategy:
     return TodosJWTStrategy(
-        secret=config.jwt_secret_key,
-        lifetime_seconds=config.jwt_lifetime_seconds
+        secret=config.JWT_SECRET_KEY.get_secret_value(),
+        lifetime_seconds=config.JWT_LIFETIME_SECONDS
     )
 
 
