@@ -4,7 +4,7 @@ from pydantic import conint
 
 from app.api.auth.deps import get_async_session
 from app.api.deps import current_logged_user
-from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT, MAX_LIMIT_GET_MULTI
+from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT, MAX_POSTGRES_INTEGER
 from app.schemas import CategoryCreate, CategoryRead, CategoryInDB
 from app.utils import exception_handler
 
@@ -20,8 +20,8 @@ router = APIRouter(
 
 @router.get('', response_model=list[CategoryRead])
 async def get_categories(
-    skip: conint(ge=0, le=MAX_LIMIT_GET_MULTI) = GET_MULTI_DEFAULT_SKIP,
-    limit: conint(ge=0, le=MAX_LIMIT_GET_MULTI) = GET_MULTI_DEFAULT_LIMIT,
+    skip: conint(ge=0, le=MAX_POSTGRES_INTEGER) = GET_MULTI_DEFAULT_SKIP,
+    limit: conint(ge=0, le=MAX_POSTGRES_INTEGER) = GET_MULTI_DEFAULT_LIMIT,
     session: AsyncSession = Depends(get_async_session),
     user=Depends(current_logged_user)
 ):
