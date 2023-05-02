@@ -48,10 +48,12 @@ Create .env file
 
 Fill the following content with your configuration and paste it into the file:
 ```dotenv
-DB_CONN_STR=postgresql+asyncpg://<username>:<password>@<hostname>:5432/<db_name>
-ORIGINS=http://localhost:3000;http://127.0.0.1:8000
-JWT_SECRET_KEY=<your-secret-key>
-JWT_LIFETIME_SECONDS=43200
+JWT_SECRET_KEY=SECRET
+CORS_ORIGINS=http://127.0.0.1:3000;http://127.0.0.1:8000
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=admin
+POSTGRES_HOST=localhost:5432
+POSTGRES_DB=app
 ```
 
 Set up the Python environment
