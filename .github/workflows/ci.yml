@@ -8,10 +8,12 @@ on:
       - main
 
 env:
-  DB_CONN_STR: postgresql+asyncpg://user:password@localhost:5432/app
-  ORIGINS: http://127.0.0.1:8000
+  POSTGRES_DB: app
+  POSTGRES_HOST: localhost:5432
+  POSTGRES_USER: user
+  POSTGRES_PASSWORD: password
+  CORS_ORIGINS: http://127.0.0.1:8000
   JWT_SECRET_KEY: secret
-  JWT_LIFETIME_SECONDS: 600
   PYTHONPATH: ./todos
 
 jobs:
