@@ -38,7 +38,6 @@ class DBService:
             query_filter=and_(valid_categories_filter, todo_categories_ids_filter)
         )
         are_categories_valid: bool = len(todo_categories_ids) == len(categories_from_db)
-        print(are_categories_valid)
         return are_categories_valid
 
     async def get_priorities(self, session: AsyncSession) -> list[Priority]:
