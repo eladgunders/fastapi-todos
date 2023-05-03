@@ -1,4 +1,4 @@
-from typing import Union, Any
+from typing import Union
 
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from fastapi_users_db_sqlalchemy import GUID
