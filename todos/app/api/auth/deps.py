@@ -10,7 +10,7 @@ from app.core.security import UserManager
 from app.models.tables import User
 
 
-async def get_async_session():
+async def get_async_session() -> AsyncGenerator[AsyncSession, Any]:
     async with Session() as session:
         yield session
 
