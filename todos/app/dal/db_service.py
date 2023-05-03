@@ -24,9 +24,7 @@ class DBService:
         todo_categories_ids: list[int],
         created_by_id: uuid.UUID
     ) -> bool:
-        """
-        validates that the todo categories are valid to the user + no duplications
-        """
+        # validates that the todo categories are valid to the user + no duplications
         default_categories_filter = Category.created_by_id.is_(None)
         user_categories_filter = Category.created_by_id == created_by_id
         valid_categories_filter = or_(default_categories_filter, user_categories_filter)
