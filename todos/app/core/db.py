@@ -12,7 +12,7 @@ Session = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
 
 # creates a table to all classes that inherits from Base
-async def create_all_entities():
+async def create_all_entities() -> None:
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)

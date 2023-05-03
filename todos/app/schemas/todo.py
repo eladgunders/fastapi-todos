@@ -34,10 +34,8 @@ class TodoInDB(BaseInDB, TodoCreate):
     class Config(BaseInDB.Config):
         orm_model = Todo
 
-    def to_orm(self):
-        """
-        converts categories_ids to todos_categories
-        """
+    def to_orm(self) -> Todo:
+        # converts categories_ids to todos_categories
         orm_data = dict(self)
         categories_ids = orm_data.pop('categories_ids')
         todo_orm = self.Config.orm_model(**orm_data)

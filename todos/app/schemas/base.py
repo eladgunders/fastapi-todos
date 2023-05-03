@@ -5,11 +5,9 @@ from app.models.base import Base
 
 
 class BaseInDB(BaseModel):
-    """
-    base schema for every schema that stored in DB.
-    provides a default method for converting
-    Pydantic objects to SQLAlchemy objects
-    """
+    # base schema for every schema that stored in DB.
+    # provides a default method for converting
+    # Pydantic objects to SQLAlchemy objects
     class Config:
         orm_model: Optional[Type[Base]] = None
 

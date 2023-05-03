@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional, Final
+from typing import Optional, Final, Union
 
 from fastapi import Request
 from fastapi_users import BaseUserManager, UUIDIDMixin
@@ -13,21 +13,22 @@ from app.models.tables import User
 config = get_config()
 
 
+# TODO: add logger
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     reset_password_token_secret = config.JWT_SECRET_KEY.get_secret_value()
     verification_token_secret = config.JWT_SECRET_KEY.get_secret_value()
 
-    async def on_after_register(self, user: User, request: Optional[Request] = None):
+    async def on_after_register(self, user: User, request: Optional[Request] = None) -> None:
         print(f'User {user.id} has registered.')
 
     async def on_after_forgot_password(
             self, user: User, token: str, request: Optional[Request] = None
-    ):
+    ) -> None:
         print(f'User {user.id} has forgot their password. Reset token: {token}')
 
     async def on_after_request_verify(
             self, user: User, token: str, request: Optional[Request] = None
-    ):
+    ) -> None:
         print(f'Verification requested for user {user.id}. Verification token: {token}')
 
 
@@ -39,7 +40,7 @@ class TodosJWTStrategy(JWTStrategy):
             self,
             secret: SecretType,
             lifetime_seconds: Optional[int],
-            token_audience=None,
+            token_audience: Optional[list[str]] = None,
             algorithm: str = JWT_HASHING_ALGORITHM,
             public_key: Optional[SecretType] = None,
     ):
@@ -53,7 +54,7 @@ class TodosJWTStrategy(JWTStrategy):
         data = self.generate_jwt_data(user)
         return generate_jwt(data, self.encode_key, self.lifetime_seconds, algorithm=self.algorithm)
 
-    def generate_jwt_data(self, user: User):
+    def generate_jwt_data(self, user: User) -> dict[str, Union[str, list[str], bool]]:
         return dict(user_id=str(user.id),
                     aud=self.token_audience,
                     email=user.email,

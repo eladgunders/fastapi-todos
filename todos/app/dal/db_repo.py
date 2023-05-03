@@ -10,20 +10,21 @@ from app.dal.constants import GET_MULTI_DEFAULT_SKIP
 
 ModelType = TypeVar('ModelType', bound=Base)
 InDBSchemaType = TypeVar('InDBSchemaType', bound=BaseInDB)
+UpdateSchemaType = TypeVar('UpdateSchemaType', bound=BaseUpdateInDB)
 
 
 class DBRepo:
 
-    def __init__(self):
+    def __init__(self) -> None:
         ...
 
-    async def get(
+    async def get(  # type: ignore[no-untyped-def]
         self,
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
-        query_filter: Optional = None
-    ) -> Union[Optional[ModelType], list[ModelType]]:
+        query_filter=None  # type: ignore
+    ) -> Union[Optional[ModelType]]:
         query = select(table_model)
         if query_filter is not None:
             query = query.filter(query_filter)
@@ -31,12 +32,12 @@ class DBRepo:
         db_objs = result.scalars()
         return db_objs.first()
 
-    async def get_multi(
+    async def get_multi(    # type: ignore[no-untyped-def]
         self,
         session: AsyncSession,
         *,
         table_model: Type[ModelType],
-        query_filter: Optional = None,
+        query_filter=None,
         skip: int = GET_MULTI_DEFAULT_SKIP,
         limit: Optional[int] = None
     ) -> list[ModelType]:
@@ -66,23 +67,24 @@ class DBRepo:
         self,
         session: AsyncSession,
         *,
-        updated_obj: BaseUpdateInDB,
+        updated_obj: UpdateSchemaType,
         db_obj_to_update: Optional[ModelType] = None
-    ) -> ModelType:
-        db_obj_to_update: ModelType = db_obj_to_update or await self.get(
+    ) -> Optional[ModelType]:
+        existing_obj_to_update: Optional[ModelType] = db_obj_to_update or await self.get(
             session,
             table_model=updated_obj.Config.orm_model,
             query_filter=updated_obj.Config.orm_model.id == updated_obj.id
         )
-        obj_to_update_data = db_obj_to_update.dict()
-        updated_data: dict[str, Any] = updated_obj.to_orm().dict()
-        for field in obj_to_update_data:
-            if field in updated_data:
-                setattr(db_obj_to_update, field, updated_data[field])
-        session.add(db_obj_to_update)
-        await session.commit()
-        await session.refresh(db_obj_to_update)
-        return db_obj_to_update
+        if existing_obj_to_update:
+            existing_obj_to_update_data = existing_obj_to_update.dict()
+            updated_data: dict[str, Any] = updated_obj.to_orm().dict()
+            for field in existing_obj_to_update_data:
+                if field in updated_data:
+                    setattr(existing_obj_to_update, field, updated_data[field])
+            session.add(existing_obj_to_update)
+            await session.commit()
+            await session.refresh(existing_obj_to_update)
+        return existing_obj_to_update
 
     async def delete(
         self,

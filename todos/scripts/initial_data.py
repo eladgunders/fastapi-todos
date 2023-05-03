@@ -22,7 +22,7 @@ async def initiate_data(session: AsyncSession) -> None:
     await session.commit()
 
 
-async def main():
+async def main() -> None:
     async with Session() as session:
         await initiate_data(session)
 
