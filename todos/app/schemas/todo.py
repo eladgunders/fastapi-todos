@@ -34,7 +34,7 @@ class TodoInDB(BaseInDB, TodoCreate):
     class Config(BaseInDB.Config):
         orm_model = Todo
 
-    def to_orm(self):
+    def to_orm(self) -> Todo:
         """
         converts categories_ids to todos_categories
         """

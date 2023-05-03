@@ -43,11 +43,17 @@ jobs:
       run: |
         pip3 install -r requirements.txt
 
-    - name: Analysing the code with pylint
+    - name: Analysing the code with Pylint
       working-directory: .
       run: |
         pip3 install pylint pylint-pydantic pylint_pytest_plugin pylint-exit
         pylint todos || pylint-exit --fail-under=1 --error-fail $?
+
+    - name: Type checking the code with mypy
+      working-directory: .
+      run: |
+        pip3 install mypy sqlalchemy2-stubs
+        mypy .
 
     - name: Analysing the code with Bandit
       working-directory: .

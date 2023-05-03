@@ -1,7 +1,7 @@
 from typing import Any
 
 import humps
-from sqlalchemy.ext.declarative import as_declarative, declared_attr
+from sqlalchemy.orm import declared_attr, as_declarative
 from sqlalchemy import inspect
 
 
@@ -10,6 +10,8 @@ class Base:
     __name__: str
 
     @declared_attr
+    # The following line is ignored by pylint even though it is like the documentation:
+    # https://docs.sqlalchemy.org/en/14/orm/extensions/mypy.html#using-declared-attr-and-declarative-mixins
     def __tablename__(cls) -> str:  # pylint: disable=no-self-argument
         return humps.depascalize(cls.__name__)
 

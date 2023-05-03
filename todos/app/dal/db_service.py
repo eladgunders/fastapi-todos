@@ -14,7 +14,7 @@ from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlrea
 
 class DBService:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._repo = DBRepo()
 
     async def _validate_todo_categories(
@@ -111,10 +111,10 @@ class DBService:
         )
 
     async def add_todo(
-            self,
-            session: AsyncSession,
-            *,
-            todo_in: TodoInDB
+        self,
+        session: AsyncSession,
+        *,
+        todo_in: TodoInDB
     ) -> Todo:
         if await self._validate_todo_categories(
             session,
@@ -127,7 +127,12 @@ class DBService:
                 raise ValueError('priority is not valid')
         raise ValueError('categories are not valid')
 
-    async def update_todo(self, session: AsyncSession, *, updated_todo: TodoUpdateInDB) -> Optional[Todo]:
+    async def update_todo(
+        self,
+        session: AsyncSession,
+        *,
+        updated_todo: TodoUpdateInDB
+    ) -> Todo:
         todo_to_update: Optional[Todo] = await self._repo.get(
             session,
             table_model=Todo,
@@ -143,7 +148,14 @@ class DBService:
             created_by_id=updated_todo.created_by_id
         ):
             try:
-                return await self._repo.update(session, updated_obj=updated_todo, db_obj_to_update=todo_to_update)
+                todo_updated_obj: Optional[Todo] = await self._repo.update(
+                    session,
+                    updated_obj=updated_todo,
+                    db_obj_to_update=todo_to_update
+                )
+                if todo_updated_obj:
+                    return todo_updated_obj
+                raise ResourceNotExists(resource='todo')
             except IntegrityError:
                 raise ValueError('priority is not valid')
         raise ValueError('categories are not valid')

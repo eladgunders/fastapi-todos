@@ -28,7 +28,7 @@ app.include_router(router)
 
 # TODO: check if necessary
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(_: Request, exc: RequestValidationError):
+async def validation_exception_handler(_: Request, exc: RequestValidationError) -> JSONResponse:
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content=jsonable_encoder({'detail': exc.errors(), 'body': exc.body}),
