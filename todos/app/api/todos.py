@@ -5,7 +5,7 @@ from pydantic import conint
 from app.api.auth.deps import get_async_session
 from app.api.deps import current_logged_user
 from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT, MAX_POSTGRES_INTEGER
-from app.schemas import TodoRead, TodoInDB, TodoCreate
+from app.schemas import TodoRead, TodoInDB, TodoCreate, TodoUpdate, TodoUpdateInDB
 from app.utils import exception_handler
 
 
@@ -48,6 +48,25 @@ async def add_todo(
         created_by_id=user.id
     )
     return await db_service.add_todo(session, todo_in=todo_in)
+
+
+@router.put('/{todo_id}', response_model=TodoRead)
+@exception_handler
+async def update_todo(
+    todo_id: int,
+    updated_todo: TodoUpdate,
+    session: AsyncSession = Depends(get_async_session),
+    user=Depends(current_logged_user)
+):
+    updated_todo = TodoUpdateInDB(
+        id=todo_id,
+        content=updated_todo.content,
+        priority_id=updated_todo.priority_id,
+        categories_ids=updated_todo.categories_ids,
+        is_completed=updated_todo.is_completed,
+        created_by_id=user.id
+    )
+    return await db_service.update_todo(session, updated_todo=updated_todo)
 
 
 @router.delete('/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)

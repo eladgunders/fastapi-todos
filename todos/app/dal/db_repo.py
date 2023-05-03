@@ -1,10 +1,10 @@
-from typing import Optional, Type, TypeVar, Union
+from typing import Optional, Type, TypeVar, Union, Any
 
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 
 from app.models.base import Base
-from app.schemas import BaseInDB
+from app.schemas.base import BaseInDB, BaseUpdateInDB
 from app.dal.constants import GET_MULTI_DEFAULT_SKIP
 
 
@@ -61,6 +61,27 @@ class DBRepo:
         await session.commit()
         await session.refresh(db_obj)
         return db_obj
+
+    async def update(
+        self,
+        session: AsyncSession,
+        *,
+        updated_obj: BaseUpdateInDB
+    ) -> ModelType:
+        db_obj_to_update: Optional[ModelType] = await self.get(
+            session,
+            table_model=updated_obj.Config.orm_model,
+            query_filter=updated_obj.Config.orm_model.id == updated_obj.id
+        )
+        obj_to_update_data = db_obj_to_update.dict()
+        updated_data: dict[str, Any] = updated_obj.to_orm().dict()
+        for field in obj_to_update_data:
+            if field in updated_data:
+                setattr(db_obj_to_update, field, updated_data[field])
+        session.add(db_obj_to_update)
+        await session.commit()
+        await session.refresh(db_obj_to_update)
+        return db_obj_to_update
 
     async def delete(
         self,

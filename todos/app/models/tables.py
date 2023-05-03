@@ -1,3 +1,5 @@
+from typing import Union
+
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID
 from fastapi_users_db_sqlalchemy import GUID
 from sqlalchemy import Column, ForeignKey, Text, String, BigInteger, Boolean, UniqueConstraint
@@ -44,9 +46,24 @@ class Todo(Base):
     """
     just for adding todos_categories when adding a todo
     """
-    todos_categories = relationship('TodoCategory')
+    todos_categories = relationship('TodoCategory', lazy='selectin', cascade='all, delete-orphan')
+
+    def dict(self):
+        """
+        adding todos_categories field to dict()
+        just update usage only
+        """
+        todo_dict: dict[str, Union[int, str, bool]] = super().dict()
+        todo_dict['todos_categories'] = self.todos_categories
+        return todo_dict
 
 
 class TodoCategory(Base):
-    todo_id = Column(BigInteger(), ForeignKey('todo.id', ondelete='CASCADE'), primary_key=True)
-    category_id = Column(BigInteger(), ForeignKey('category.id', ondelete='CASCADE'), primary_key=True)
+    todo_id = Column(
+        BigInteger(),
+        ForeignKey('todo.id', ondelete='CASCADE'), primary_key=True
+    )
+    category_id = Column(
+        BigInteger(),
+        ForeignKey('category.id', ondelete='CASCADE'), primary_key=True
+    )
