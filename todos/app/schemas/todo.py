@@ -2,7 +2,7 @@ import uuid
 
 from pydantic import BaseModel
 
-from app.schemas.base import BaseInDB
+from app.schemas.base import BaseInDB, BaseUpdateInDB
 from app.schemas.priority import PriorityRead
 from app.schemas.category import CategoryRead
 from app.models.tables import Todo, TodoCategory
@@ -43,3 +43,11 @@ class TodoInDB(BaseInDB, TodoCreate):
         todo_orm = self.Config.orm_model(**orm_data)
         todo_orm.todos_categories = [TodoCategory(category_id=c_id) for c_id in categories_ids]
         return todo_orm
+
+
+class TodoUpdate(TodoCreate):
+    is_completed: bool
+
+
+class TodoUpdateInDB(BaseUpdateInDB, TodoInDB):
+    is_completed: bool

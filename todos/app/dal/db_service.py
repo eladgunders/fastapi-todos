@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.dal.db_repo import DBRepo
 from app.dal.constants import GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT
 from app.models.tables import Priority, Category, Todo
-from app.schemas import CategoryInDB, TodoInDB
+from app.schemas import CategoryInDB, TodoInDB, TodoUpdateInDB
 from app.http_exceptions import ResourceNotExists, UserNotAllowed, ResourceAlreadyExists
 
 
@@ -16,6 +16,29 @@ class DBService:
 
     def __init__(self):
         self._repo = DBRepo()
+
+    async def _validate_todo_categories(
+        self,
+        session: AsyncSession,
+        *,
+        todo_categories_ids: list[int],
+        created_by_id: uuid.UUID
+    ) -> bool:
+        """
+        validates that the todo categories are valid to the user + no duplications
+        """
+        default_categories_filter = Category.created_by_id.is_(None)
+        user_categories_filter = Category.created_by_id == created_by_id
+        valid_categories_filter = or_(default_categories_filter, user_categories_filter)
+        todo_categories_ids_filter = Category.id.in_(todo_categories_ids)
+
+        categories_from_db: list[Category] = await self._repo.get_multi(
+            session,
+            table_model=Category,
+            query_filter=and_(valid_categories_filter, todo_categories_ids_filter)
+        )
+        are_categories_valid: bool = len(todo_categories_ids) == len(categories_from_db)
+        return are_categories_valid
 
     async def get_priorities(self, session: AsyncSession) -> list[Priority]:
         return await self._repo.get_multi(session, table_model=Priority)
@@ -93,21 +116,34 @@ class DBService:
             *,
             todo_in: TodoInDB
     ) -> Todo:
-        todo_categories_ids: list[int] = todo_in.categories_ids
-        default_categories_filter = Category.created_by_id.is_(None)
-        user_categories_filter = Category.created_by_id == todo_in.created_by_id
-        valid_categories_filter = or_(default_categories_filter, user_categories_filter)
-        todo_categories_ids_filter = Category.id.in_(todo_categories_ids)
-
-        valid_todo_categories_from_db: list[Category] = await self._repo.get_multi(
+        if await self._validate_todo_categories(
             session,
-            table_model=Category,
-            query_filter=and_(valid_categories_filter, todo_categories_ids_filter)
-        )
-        are_categories_valid: bool = len(todo_categories_ids) == len(valid_todo_categories_from_db)
-        if are_categories_valid:
+            todo_categories_ids=todo_in.categories_ids,
+            created_by_id=todo_in.created_by_id
+        ):
             try:
                 return await self._repo.create(session, obj_to_create=todo_in)
+            except IntegrityError:
+                raise ValueError('priority is not valid')
+        raise ValueError('categories are not valid')
+
+    async def update_todo(self, session: AsyncSession, *, updated_todo: TodoUpdateInDB) -> Optional[Todo]:
+        todo_to_update: Optional[Todo] = await self._repo.get(
+            session,
+            table_model=Todo,
+            query_filter=Todo.id == updated_todo.id
+        )
+        if not todo_to_update:
+            raise ResourceNotExists(resource='todo')
+        if not todo_to_update.created_by_id == updated_todo.created_by_id:
+            raise UserNotAllowed('a user can not update a todo that was not created by him')
+        if await self._validate_todo_categories(
+            session,
+            todo_categories_ids=updated_todo.categories_ids,
+            created_by_id=updated_todo.created_by_id
+        ):
+            try:
+                return await self._repo.update(session, updated_obj=updated_todo, db_obj_to_update=todo_to_update)
             except IntegrityError:
                 raise ValueError('priority is not valid')
         raise ValueError('categories are not valid')
