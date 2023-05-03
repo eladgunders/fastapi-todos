@@ -144,7 +144,7 @@ class DBService:
             created_by_id=updated_todo.created_by_id
         ):
             try:
-                return await self._repo.update(session, updated_obj=updated_todo)
+                return await self._repo.update(session, updated_obj=updated_todo, db_obj_to_update=todo_to_update)
             except IntegrityError:
                 raise ValueError('priority is not valid')
         raise ValueError('categories are not valid')

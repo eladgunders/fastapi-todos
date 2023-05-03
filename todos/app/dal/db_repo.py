@@ -66,9 +66,10 @@ class DBRepo:
         self,
         session: AsyncSession,
         *,
-        updated_obj: BaseUpdateInDB
+        updated_obj: BaseUpdateInDB,
+        db_obj_to_update: Optional[ModelType] = None
     ) -> ModelType:
-        db_obj_to_update: Optional[ModelType] = await self.get(
+        db_obj_to_update: ModelType = db_obj_to_update or await self.get(
             session,
             table_model=updated_obj.Config.orm_model,
             query_filter=updated_obj.Config.orm_model.id == updated_obj.id
