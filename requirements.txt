@@ -8,3 +8,4 @@ starlette==0.20.4
 SQLAlchemy==1.4.41
 uvicorn==0.18.3
 asyncpg==0.26.0
+alembic==1.5.8

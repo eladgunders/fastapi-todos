@@ -40,8 +40,7 @@ jobs:
 
     - name: Install dependencies
       working-directory: .
-      run: |
-        pip3 install -r requirements.txt
+      run: pip3 install -r requirements.txt
 
     - name: Analysing the code with Pylint
       working-directory: .
@@ -61,19 +60,17 @@ jobs:
         pip3 install bandit
         bandit -c bandit.yaml -r .
 
-    - name: Create tables
+    - name: Database migrations
       working-directory: .
       run: python3 todos/scripts/init_db.py
 
     - name: Initial data
       working-directory: .
-      run: |
-        python3 todos/scripts/initial_data.py
+      run: python3 todos/scripts/initial_data.py
 
     - name: Initiate test user
       working-directory: .
-      run: |
-        python3 todos/tests/scripts/initiate_test_user.py
+      run: alembic upgrade head
 
     - name: Test
       run: |
