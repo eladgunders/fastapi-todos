@@ -1,8 +1,8 @@
 from logging.config import fileConfig
 
 import asyncio
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import pool, engine_from_config
+from sqlalchemy.engine.base import Connection
 from sqlalchemy.ext.asyncio import AsyncEngine
 from alembic import context
 
@@ -12,7 +12,7 @@ from app.core.config import get_config
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-config.set_main_option("sqlalchemy.url", get_config().POSTGRES_URI)
+config.set_main_option('sqlalchemy.url', get_config().POSTGRES_URI)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -31,7 +31,7 @@ target_metadata = Base.metadata
 # ... etc.
 
 
-def run_migrations_offline():
+def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
     This configures the context with just a URL
@@ -43,12 +43,12 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = config.get_main_option('sqlalchemy.url')
     context.configure(
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
+        dialect_opts={'paramstyle': 'named'},
         compare_type=True
     )
 
@@ -56,7 +56,7 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-def do_run_migrations(connection):
+def do_run_migrations(connection: Connection) -> None:
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
@@ -67,7 +67,7 @@ def do_run_migrations(connection):
         context.run_migrations()
 
 
-async def run_migrations_online():
+async def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine
@@ -75,9 +75,9 @@ async def run_migrations_online():
 
     """
     connectable = AsyncEngine(
-        engine_from_config(
+        engine_from_config(  # type: ignore[arg-type]
             config.get_section(config.config_ini_section),
-            prefix="sqlalchemy.",
+            prefix='sqlalchemy.',
             poolclass=pool.NullPool,
             future=True,
         )
