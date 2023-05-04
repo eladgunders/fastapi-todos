@@ -62,7 +62,7 @@ jobs:
 
     - name: Database migrations
       working-directory: .
-      run: python3 todos/scripts/init_db.py
+      run: alembic upgrade head
 
     - name: Initial data
       working-directory: .
@@ -70,7 +70,7 @@ jobs:
 
     - name: Initiate test user
       working-directory: .
-      run: alembic upgrade head
+      run: python3 todos/tests/scripts/initiate_test_user.py
 
     - name: Test
       run: |
