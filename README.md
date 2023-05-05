@@ -68,7 +68,7 @@ Set up the Python environment
 
 Migrate the database
 
-    $ python alembic upgrade head
+    $ alembic upgrade head
     
 Initiate base data
 
