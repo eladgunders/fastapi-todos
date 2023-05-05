@@ -66,9 +66,9 @@ Set up the Python environment
 > 
 > This project is currently requires a running instance of PostgreSQL to function properly
 
-Initiate the tables
+Migrate the database
 
-    $ python todos/scripts/init_db.py
+    $ python alembic upgrade head
     
 Initiate base data
 
