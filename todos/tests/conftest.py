@@ -1,6 +1,6 @@
-import asyncio
 from typing import Final
 
+import asyncio
 from httpx import AsyncClient
 from asgi_lifespan import LifespanManager
 import pytest_asyncio
