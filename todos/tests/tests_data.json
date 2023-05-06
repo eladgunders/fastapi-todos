@@ -54,17 +54,5 @@
       "id": 2,
       "name": "Work"
     }
-  ],
-  "todos": [
-    {
-      "content": "Low priority personal todo",
-      "priority_id": 1,
-      "categories_ids": [1]
-    },
-    {
-      "content": "Medium priority todo",
-      "priority_id": 2,
-      "categories_ids": []
-    }
   ]
 }
