@@ -26,7 +26,7 @@ app.add_middleware(
 app.include_router(router)
 
 
-# TODO: check if necessary
+# override the default fastapi HTTP status code (422) with 400 to mark it as a client bad request
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(_: Request, exc: RequestValidationError) -> JSONResponse:
     return JSONResponse(
