@@ -44,6 +44,50 @@ async def test_add_category(
     status_code,
     res_body
 ):
-    post_res = await client.post('/categories', headers=headers, json=data)
-    assert post_res.status_code == status_code
-    assert post_res.json() == res_body
+    res = await client.post('/categories', headers=headers, json=data)
+    assert res.status_code == status_code
+    assert res.json() == res_body
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize('headers, category_id, status_code, res_body', [
+    (None, 1, 401, {'detail': 'Unauthorized'}),
+    (lazy_fixture('user_token_headers'), 5, 404, {'detail': 'category does not exist'}),
+    (
+        lazy_fixture('user_token_headers'),
+        1,
+        403,
+        {'detail': 'a user can not delete a category that was not created by him'}
+    ),
+    (
+        lazy_fixture('user_token_headers'),
+        4,
+        403,
+        {'detail': 'a user can not delete a category that was not created by him'}
+    )
+], ids=[
+    'unauthorized access',
+    'authorized access non existing category',
+    'authorized access default existing category',
+    'authorized access another users existing category'
+])
+async def test_delete_category_failure(
+    client: AsyncClient,
+    headers,
+    category_id,
+    status_code,
+    res_body
+):
+    res = await client.delete(f'/categories/{category_id}', headers=headers)
+    assert res.status_code == status_code
+    assert res.json() == res_body
+
+
+@pytest.mark.asyncio
+async def test_delete_category_success(
+    client: AsyncClient,
+    user_token_headers: dict[str, str]
+):
+    res = await client.delete('/categories/3', headers=user_token_headers)
+    assert res.status_code == 204
+    assert len(res.content) == 0
