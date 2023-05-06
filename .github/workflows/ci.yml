@@ -64,15 +64,7 @@ jobs:
       working-directory: .
       run: alembic upgrade head
 
-    - name: Initial data
-      working-directory: .
-      run: python3 todos/scripts/initial_data.py
-
-    - name: Initiate test user
-      working-directory: .
-      run: python3 todos/tests/scripts/initiate_test_user.py
-
     - name: Test
       run: |
-        pip3 install pytest pytest-asyncio httpx 'asgi-lifespan==2.*'
+        pip3 install pytest pytest-asyncio pytest-lazy-fixture httpx 'asgi-lifespan==2.*'
         pytest .
