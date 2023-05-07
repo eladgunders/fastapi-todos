@@ -22,7 +22,17 @@ This project combines the following:
 
 ... and some [more stuff](./requirements.txt).
 
-## Running Locally 🐳
+## Running Locally 🏡
+
+### Setting up the project 👷
+
+Clone the repository and navigate to its directory:
+
+    $ git clone https://github.com/eladgunders/fastapi-todos.git
+    $ cd fastapi-todos
+
+### Running the application with Docker Compose 🐳
+
 To run the application locally, you will need to have [Docker](https://docs.docker.com/get-docker/)
 and [Docker Compose](https://docs.docker.com/compose/install/) installed on your machine.
 
