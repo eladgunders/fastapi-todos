@@ -1,11 +1,14 @@
-import asyncio
+from typing import Final
 import json
 
+import asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import Session
 from app.models.tables import Priority, Category
-from tests.constants import INITIAL_DATA_FILE_PATH
+
+
+INITIAL_DATA_FILE_PATH: Final[str] = 'todos/scripts/initial_data.json'
 
 
 async def initiate_data(session: AsyncSession) -> None:

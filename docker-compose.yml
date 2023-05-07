@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  web:
+    env_file:
+      - ./web-variables.env
+    build: .
+    volumes:
+      - ./todos:/todos
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+  db:
+    env_file:
+      - ./web-variables.env
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+
+volumes:
+  postgres_data:
