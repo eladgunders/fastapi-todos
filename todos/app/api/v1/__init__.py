@@ -10,7 +10,7 @@ from app.core.config import get_config
 
 config = get_config()
 
-router = APIRouter(prefix=f'/{config.API_V1_STR}')
+router = APIRouter(prefix=config.API_V1_STR)
 
 router.include_router(auth_router)
 router.include_router(users_router)
