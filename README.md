@@ -41,7 +41,10 @@ Once you have Docker and Docker Compose installed, you can use the following com
     $ docker compose up
 
 If everything is working correctly, you should see output in your terminal indicating
-that the application is running. You can then access the application from http://localhost:8000.
+that the application is running.
+
+You can then access the application from http://localhost:8000.
+
 You can also view the Swagger documentation for the API by visiting http://localhost:8000/docs on your web browser.
 
 ## License 📜
