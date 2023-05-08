@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.users.users import get_user_db, get_user_manager
 from app.schemas import UserCreate
 from app.models.tables import Priority, Category, Todo, TodoCategory, User
+from app.core.config import get_config
 
 
 TESTS_DATA_FILE_PATH: Final[str] = 'todos/tests/tests_data.json'
@@ -54,14 +55,15 @@ async def insert_test_data(session: AsyncSession) -> None:
     await session.commit()
 
 
+config = get_config()
+
+
 async def get_user_token_headers(client: AsyncClient) -> dict[str, str]:
     tests_data = get_tests_data()
     login_data = {
         'username': tests_data['users'][0]['email'],
         'password': tests_data['users'][0]['password'],
     }
-    res = await client.post('/auth/login', data=login_data)
+    res = await client.post(f'{config.API_V1_STR}/auth/login', data=login_data)
     access_token = res.json()['access_token']
     return {'Authorization': f'Bearer {access_token}'}
-
-

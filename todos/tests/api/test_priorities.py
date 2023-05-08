@@ -3,6 +3,10 @@ from pytest_lazyfixture import lazy_fixture
 from httpx import AsyncClient
 
 from tests.conftest_utils import get_tests_data
+from app.core.config import get_config
+
+
+config = get_config()
 
 
 @pytest.mark.asyncio
@@ -16,6 +20,6 @@ async def test_get_priorities(
     status_code,
     res_body
 ):
-    res = await client.get('/priorities', headers=headers)
+    res = await client.get(f'{config.API_V1_STR}/priorities', headers=headers)
     assert res.status_code == status_code
     assert res.json() == res_body

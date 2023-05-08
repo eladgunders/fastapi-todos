@@ -5,7 +5,7 @@ from pydantic import BaseSettings, PostgresDsn, AnyHttpUrl, validator, SecretStr
 
 
 class Settings(BaseSettings):
-
+    API_V1_STR: str = '/api/v1'
     JWT_SECRET_KEY: SecretStr
 
     # 60 seconds by 60 minutes (1 hour) and then by 12 (for 12 hours total)
