@@ -13,7 +13,10 @@ from app.core.config import get_config
 
 config = get_config()
 
-app = FastAPI(title='TODOS API')
+app = FastAPI(
+    title='TODOS API',
+    openapi_url=f'{config.API_V1_STR}/openapi.json'
+)
 
 app.add_middleware(
     CORSMiddleware,
