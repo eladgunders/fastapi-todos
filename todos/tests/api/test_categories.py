@@ -24,7 +24,7 @@ async def test_get_categories(
     status_code,
     res_body
 ):
-    res = await client.get(f'/{config.API_V1_STR}/categories', headers=headers)
+    res = await client.get(f'{config.API_V1_STR}/categories', headers=headers)
     assert res.status_code == status_code
     assert res.json() == res_body
 
@@ -48,7 +48,7 @@ async def test_add_category(
     status_code,
     res_body
 ):
-    res = await client.post(f'/{config.API_V1_STR}/categories', headers=headers, json=data)
+    res = await client.post(f'{config.API_V1_STR}/categories', headers=headers, json=data)
     assert res.status_code == status_code
     assert res.json() == res_body
 
@@ -82,7 +82,7 @@ async def test_delete_category_failure(
     status_code,
     res_body
 ):
-    res = await client.delete(f'/{config.API_V1_STR}/categories/{category_id}', headers=headers)
+    res = await client.delete(f'{config.API_V1_STR}/categories/{category_id}', headers=headers)
     assert res.status_code == status_code
     assert res.json() == res_body
 
@@ -92,6 +92,6 @@ async def test_delete_category_success(
     client: AsyncClient,
     user_token_headers: dict[str, str]
 ):
-    res = await client.delete(f'/{config.API_V1_STR}/categories/3', headers=user_token_headers)
+    res = await client.delete(f'{config.API_V1_STR}/categories/3', headers=user_token_headers)
     assert res.status_code == 204
     assert len(res.content) == 0

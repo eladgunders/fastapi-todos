@@ -20,6 +20,6 @@ async def test_get_priorities(
     status_code,
     res_body
 ):
-    res = await client.get(f'/{config.API_V1_STR}/priorities', headers=headers)
+    res = await client.get(f'{config.API_V1_STR}/priorities', headers=headers)
     assert res.status_code == status_code
     assert res.json() == res_body

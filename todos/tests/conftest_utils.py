@@ -64,6 +64,6 @@ async def get_user_token_headers(client: AsyncClient) -> dict[str, str]:
         'username': tests_data['users'][0]['email'],
         'password': tests_data['users'][0]['password'],
     }
-    res = await client.post(f'/{config.API_V1_STR}/auth/login', data=login_data)
+    res = await client.post(f'{config.API_V1_STR}/auth/login', data=login_data)
     access_token = res.json()['access_token']
     return {'Authorization': f'Bearer {access_token}'}
