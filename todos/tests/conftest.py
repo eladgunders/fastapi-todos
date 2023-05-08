@@ -6,8 +6,7 @@ from asgi_lifespan import LifespanManager
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncConnection, AsyncSession
 
-from app.api.auth.deps import get_async_session
-from app.core.db import engine
+from app.core.db import engine, get_async_session
 from app.main import app
 from tests.conftest_utils import insert_test_data, get_user_token_headers
 

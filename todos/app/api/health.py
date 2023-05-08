@@ -5,14 +5,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from fastapi import APIRouter, Depends, status, Response
 
-from app.api.auth.deps import get_async_session, get_user_manager
+from app.core.db import get_async_session
 
 router = APIRouter(
     prefix='/health',
-    dependencies=[
-        Depends(get_async_session),
-        Depends(get_user_manager)
-    ],
+    dependencies=[Depends(get_async_session)],
     tags=['Health']
 )
 

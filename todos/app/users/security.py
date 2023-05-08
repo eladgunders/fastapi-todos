@@ -1,8 +1,6 @@
-import uuid
 from typing import Optional, Final, Union
 
-from fastapi_users import BaseUserManager, UUIDIDMixin
-from fastapi_users.authentication import AuthenticationBackend, JWTStrategy, BearerTransport
+from fastapi_users.authentication import JWTStrategy
 from fastapi_users.jwt import SecretType, generate_jwt
 
 from app.core.config import get_config
@@ -10,12 +8,6 @@ from app.models.tables import User
 
 
 config = get_config()
-
-
-class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
-    reset_password_token_secret = config.JWT_SECRET_KEY
-    verification_token_secret = config.JWT_SECRET_KEY
-
 
 JWT_HASHING_ALGORITHM: Final[str] = 'HS256'
 
@@ -51,13 +43,3 @@ def get_jwt_strategy() -> JWTStrategy:
         secret=config.JWT_SECRET_KEY,
         lifetime_seconds=config.JWT_LIFETIME_SECONDS
     )
-
-
-bearer_transport = BearerTransport(tokenUrl='auth/login')
-
-
-auth_backend = AuthenticationBackend(
-    name='jwt',
-    transport=bearer_transport,
-    get_strategy=get_jwt_strategy,
-)
