@@ -1,42 +1,4 @@
 {
-  "priorities": [
-    {
-      "id": 1,
-      "name": "low"
-    },
-    {
-      "id": 2,
-      "name": "medium"
-    },
-    {
-      "id": 3,
-      "name": "high"
-    }
-  ],
-  "categories": [
-    {
-      "id": 1,
-      "name": "Personal"
-    },
-    {
-      "id": 2,
-      "name": "Work"
-    },
-    {
-      "id": 3,
-      "name": "Home"
-    },
-    {
-      "id": 4,
-      "name": "Health"
-    },
-    {
-      "id": 5,
-      "name": "Social"
-    },
-    {
-      "id": 6,
-      "name": "Entertainment"
-    }
-  ]
+  "priorities_names": ["Low", "Medium", "High"],
+  "categories_names": ["Personal", "Work", "Home", "Health", "Social", "Entertainment"]
 }
