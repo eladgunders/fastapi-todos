@@ -8,7 +8,6 @@ on:
       - main
 
 env:
-  API_V1_STR: api/v1
   POSTGRES_DB: app
   POSTGRES_HOST: localhost:5432
   POSTGRES_USER: user
