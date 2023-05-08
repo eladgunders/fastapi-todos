@@ -5,7 +5,7 @@ import json
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.auth.deps import get_user_db, get_user_manager
+from app.users.auth import get_user_db, get_user_manager
 from app.schemas import UserCreate
 from app.models.tables import Priority, Category, Todo, TodoCategory, User
 
