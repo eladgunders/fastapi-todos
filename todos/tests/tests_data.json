@@ -1,4 +1,24 @@
 {
+  "priorities": [
+    {
+      "id": 1,
+      "name": "Low"
+    },
+    {
+      "id": 2,
+      "name": "Medium"
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "name": "Personal"
+    },
+    {
+      "id": 2,
+      "name": "Work"
+    }
+  ],
   "users": [
     {
       "email": "test1@test.com",
@@ -33,26 +53,6 @@
           "categories_ids": [1, 4]
         }
       ]
-    }
-  ],
-  "priorities": [
-    {
-      "id": 1,
-      "name": "Low"
-    },
-    {
-      "id": 2,
-      "name": "Medium"
-    }
-  ],
-  "categories": [
-    {
-      "id": 1,
-      "name": "Personal"
-    },
-    {
-      "id": 2,
-      "name": "Work"
     }
   ]
 }
