@@ -46,9 +46,9 @@ async def insert_test_data(session: AsyncSession) -> None:
         todos: list[Todo] = [
             Todo(
                 content=t['content'],
-                priority_id=t['priority_id'],
+                priority_id=t['priority']['id'],
                 created_by_id=db_user.id,
-                todos_categories=[TodoCategory(category_id=c_id) for c_id in t['categories_ids']]
+                todos_categories=[TodoCategory(category_id=c['id']) for c in t['categories']]
             ) for t in user['todos']
         ]
         session.add_all(todos)
