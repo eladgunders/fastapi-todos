@@ -29,8 +29,7 @@ class DBRepo:
         if query_filter is not None:
             query = query.filter(query_filter)
         result = await session.execute(query)
-        db_objs = result.scalars()
-        return db_objs.first()
+        return result.scalars().first()
 
     async def get_multi(    # type: ignore[no-untyped-def]
         self,
@@ -48,8 +47,7 @@ class DBRepo:
         if limit is not None:
             query = query.limit(limit)
         result = await session.execute(query)
-        db_objs = result.scalars()
-        return db_objs.all()
+        return result.scalars().all()
 
     async def create(
         self,
