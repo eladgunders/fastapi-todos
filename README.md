@@ -4,6 +4,10 @@
   <p>FastAPI 🚀 • PostgreSQL 🐘 • SQLAlchemy 💠 • FastAPIUsers 👥</p>
 </div>
 
+> **Warning**
+>
+> This project is currently under development
+
 ## Introduction 🧚
 
 The app provides a fully async backend web server for to-do lists apps.
