@@ -1,5 +1,6 @@
 import uuid
 from typing import Optional
+import logging
 from urllib.request import Request
 
 from pydantic import SecretStr
@@ -11,6 +12,9 @@ from app.utils.emails import send_reset_password_email, send_user_verification_e
 
 
 config = get_config()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
@@ -24,6 +28,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             request: Optional[Request] = None
     ) -> None:
         send_reset_password_email(email_to=user.email, token=token)
+        logger.info('sent reset password email to %s', user.email)
 
     async def on_after_request_verify(
             self,
@@ -32,3 +37,4 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             request: Optional[Request] = None
     ) -> None:
         send_user_verification_email(email_to=user.email, token=token)
+        logger.info('sent account verification email to %s', user.email)
