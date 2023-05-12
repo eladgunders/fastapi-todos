@@ -1,10 +1,11 @@
 from functools import lru_cache
 from typing import Any, Optional
 
-from pydantic import BaseSettings, PostgresDsn, AnyHttpUrl, validator, SecretStr
+from pydantic import BaseSettings, PostgresDsn, AnyHttpUrl, validator, SecretStr, EmailStr
 
 
 class Settings(BaseSettings):
+    PROJECT_NAME: str = 'Todos API'
     API_V1_STR: str = '/api/v1'
     JWT_SECRET_KEY: SecretStr
 

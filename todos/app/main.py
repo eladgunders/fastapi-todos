@@ -14,7 +14,7 @@ from app.core.config import get_config
 config = get_config()
 
 app = FastAPI(
-    title='TODOS API',
+    title=config.PROJECT_NAME,
     openapi_url=f'{config.API_V1_STR}/openapi.json'
 )
 
