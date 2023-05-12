@@ -41,7 +41,7 @@ def send_email(
 
 
 def send_reset_password_email(*, email_to: str, users_email: str, token: str) -> None:
-    subject = f'{config.PROJECT_NAME} - Password recovery for user {users_email}'
+    subject = f'{config.PROJECT_NAME} - Password recovery for email {users_email}'
     with open(Path(config.EMAIL_TEMPLATES_DIR) / 'reset_password.html', 'r', encoding='utf-8') as f:
         template_str = f.read()
     link = f'{config.FRONT_END_BASE_URL}/reset-password?token={token}'
