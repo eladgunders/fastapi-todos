@@ -23,7 +23,7 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             token: str,
             request: Optional[Request] = None
     ) -> None:
-        send_reset_password_email(email_to=user.email, users_email=user.email, token=token)
+        send_reset_password_email(email_to=user.email, token=token)
 
     async def on_after_request_verify(
             self,
@@ -31,4 +31,4 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             token: str,
             request: Optional[Request] = None
     ) -> None:
-        send_user_verification_email(email_to=user.email, users_email=user.email, token=token)
+        send_user_verification_email(email_to=user.email, token=token)
