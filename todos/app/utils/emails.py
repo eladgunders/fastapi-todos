@@ -56,7 +56,7 @@ def send_reset_password_email(*, email_to: str, token: str) -> None:
     )
 
 
-def send_user_verification_email(*, email_to: str, token: str) -> None:
+def send_account_verification_email(*, email_to: str, token: str) -> None:
     subject = f'{config.PROJECT_NAME} - Account verification for email {email_to}'
     with open(f'{config.EMAIL_TEMPLATES_DIR}/account_verification.html', 'r', encoding='utf-8') as f:
         template_str = f.read()

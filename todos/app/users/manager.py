@@ -8,7 +8,7 @@ from fastapi_users import BaseUserManager, UUIDIDMixin
 
 from app.core.config import get_config
 from app.models.tables import User
-from app.utils.emails import send_reset_password_email, send_user_verification_email
+from app.utils.emails import send_reset_password_email, send_account_verification_email
 
 
 config = get_config()
@@ -36,5 +36,5 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
             token: str,
             request: Optional[Request] = None
     ) -> None:
-        send_user_verification_email(email_to=user.email, token=token)
+        send_account_verification_email(email_to=user.email, token=token)
         logger.info('sent account verification email to %s', user.email)
