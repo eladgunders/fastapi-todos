@@ -33,6 +33,27 @@ class Settings(BaseSettings):
             path=f'/{values.get("POSTGRES_DB")}',
         )
 
+    SMTP_TLS: bool = True
+    SMTP_HOST: Optional[str] = None
+    SMTP_PORT: Optional[int] = None
+    SMTP_USER: Optional[str] = None
+    SMTP_PASSWORD: Optional[SecretStr] = None
+    EMAILS_FROM_EMAIL: Optional[EmailStr] = None
+    EMAILS_FROM_NAME: Optional[str] = None
+
+    EMAIL_TEMPLATES_DIR: str = './todos/app/email-templates'
+    EMAILS_ENABLED: bool = False
+
+    @validator('EMAILS_ENABLED', pre=True)
+    def get_emails_enabled(cls, _: bool, values: dict[str, Any]) -> bool:
+        return all([
+            values.get('SMTP_HOST'),
+            values.get('SMTP_PORT'),
+            values.get('EMAILS_FROM_EMAIL')
+        ])
+
+    FRONT_END_BASE_URL: AnyHttpUrl
+
     class Config:
         env_file = '.env'
         case_sensitive = True
