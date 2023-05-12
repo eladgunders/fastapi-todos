@@ -55,3 +55,21 @@ def send_reset_password_email(*, email_to: str, users_email: str, token: str) ->
             'link': link,
         }
     )
+
+
+def send_user_verification_email(*, email_to: str, users_email: str, token: str) -> None:
+    subject = f'{config.PROJECT_NAME} - Account verification'
+    with open(f'{config.EMAIL_TEMPLATES_DIR}/account_verification.html', 'r', encoding='utf-8') as f:
+        template_str = f.read()
+    link = f'{config.FRONT_END_BASE_URL}/verify-account?token={token}'
+    send_email(
+        email_to=email_to,
+        subject_template=subject,
+        html_template=template_str,
+        environment={
+            'project_name': config.PROJECT_NAME,
+            'users_email': users_email,
+            'email': email_to,
+            'link': link,
+        }
+    )
