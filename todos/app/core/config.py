@@ -1,10 +1,11 @@
 from functools import lru_cache
 from typing import Any, Optional
 
-from pydantic import BaseSettings, PostgresDsn, AnyHttpUrl, validator, SecretStr
+from pydantic import BaseSettings, PostgresDsn, AnyHttpUrl, validator, SecretStr, EmailStr
 
 
 class Settings(BaseSettings):
+    PROJECT_NAME: str = 'Todos API'
     API_V1_STR: str = '/api/v1'
     JWT_SECRET_KEY: SecretStr
 
@@ -31,6 +32,37 @@ class Settings(BaseSettings):
             host=values.get('POSTGRES_HOST'),
             path=f'/{values.get("POSTGRES_DB")}',
         )
+
+    SMTP_TLS: bool = True
+    SMTP_HOST: Optional[str] = None
+    SMTP_PORT: Optional[int] = None
+    SMTP_USER: Optional[str] = None
+    SMTP_PASSWORD: Optional[SecretStr] = None
+    EMAILS_FROM_EMAIL: Optional[EmailStr] = None
+    EMAILS_FROM_NAME: Optional[str] = None
+
+    @validator('EMAILS_FROM_NAME')
+    def get_project_name(cls, v: Optional[str], values: dict[str, Any]) -> str:
+        if not v:
+            return values['PROJECT_NAME']
+        return v
+
+    EMAIL_TEMPLATES_DIR: str = './todos/app/email-templates'
+    EMAILS_ENABLED: bool = False
+
+    @validator('EMAILS_ENABLED', pre=True)
+    def get_emails_enabled(cls, _: bool, values: dict[str, Any]) -> bool:
+        return all([
+            values.get('SMTP_HOST'),
+            values.get('SMTP_PORT'),
+            values.get('EMAILS_FROM_EMAIL')
+        ])
+
+    # 60 seconds by 60 minutes (1 hour) and then by 12 (for 12 hours total)
+    RESET_PASSWORD_TOKEN_LIFETIME_SECONDS: int = 60 * 60 * 12
+    VERIFY_TOKEN_LIFETIME_SECONDS: int = 60 * 60 * 12
+
+    FRONT_END_BASE_URL: AnyHttpUrl
 
     class Config:
         env_file = '.env'

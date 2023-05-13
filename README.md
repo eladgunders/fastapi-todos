@@ -35,6 +35,19 @@ Clone the repository and navigate to its directory:
     $ git clone https://github.com/eladgunders/fastapi-todos.git
     $ cd fastapi-todos
 
+### Setting up environment variables ⚙️
+
+To properly configure the application, you'll need to define the following environment variables in the ```web-variables.env``` file:
+
+- ```CORS_ORIGINS```: a comma-separated list of allowed origins for Cross-Origin Resource Sharing (CORS).
+- ```FRONT_END_BASE_URL```: the base URL of your frontend application.
+- ```SMTP_HOST```: the hostname or IP address of the SMTP server that will be used for sending emails.
+- ```SMTP_PORT```: the port number of the SMTP server. Usually, this is 587.
+- ```SMTP_USER```: the username for authenticating with the SMTP server.
+- ```SMTP_PASSWORD```: the password for authenticating with the SMTP server.
+- ```EMAILS_FROM_EMAIL```: the email address that will appear as the sender of all system-generated emails.
+- ```EMAILS_FROM_NAME```: the name that will appear as the sender of all system-generated emails.
+
 ### Running the application with Docker Compose 🐳
 
 To run the application locally, you will need to have [Docker](https://docs.docker.com/get-docker/)
