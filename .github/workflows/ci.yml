@@ -14,6 +14,12 @@ env:
   POSTGRES_PASSWORD: password
   CORS_ORIGINS: http://127.0.0.1:8000
   JWT_SECRET_KEY: secret
+  SMTP_HOST: smtp.gmail.com
+  SMTP_PORT: 587
+  SMTP_USER: random.user@gmail.com
+  SMTP_PASSWORD: random.password
+  EMAILS_FROM_EMAIL: random.user@gmail.com
+  FRONT_END_BASE_URL: http://localhost:3000
   PYTHONPATH: ./todos
 
 jobs:
