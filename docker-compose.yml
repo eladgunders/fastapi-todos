@@ -4,6 +4,7 @@ services:
   web:
     env_file:
       - ./web-variables.env
+      - ./db-variables.env
     build: .
     ports:
       - 8000:8000
@@ -12,7 +13,7 @@ services:
 
   db:
     env_file:
-      - ./web-variables.env
+      - ./db-variables.env
     image: postgres:13-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
