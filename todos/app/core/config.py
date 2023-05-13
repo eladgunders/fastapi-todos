@@ -41,6 +41,12 @@ class Settings(BaseSettings):
     EMAILS_FROM_EMAIL: Optional[EmailStr] = None
     EMAILS_FROM_NAME: Optional[str] = None
 
+    @validator('EMAILS_FROM_NAME')
+    def get_project_name(cls, v: Optional[str], values: dict[str, Any]) -> str:
+        if not v:
+            return values['PROJECT_NAME']
+        return v
+
     EMAIL_TEMPLATES_DIR: str = './todos/app/email-templates'
     EMAILS_ENABLED: bool = False
 
