@@ -7,7 +7,7 @@ from app.users.users import current_logged_user
 from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT, MAX_POSTGRES_INTEGER
 from app.schemas import CategoryCreate, CategoryRead, CategoryInDB
 from app.models.tables import Category, User
-from app.utils.exceptions import exception_handler
+from app.utils import exception_handler
 
 router = APIRouter(
     prefix='/categories',

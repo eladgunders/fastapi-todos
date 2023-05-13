@@ -8,7 +8,7 @@ from fastapi_users import BaseUserManager, UUIDIDMixin
 
 from app.core.config import get_config
 from app.models.tables import User
-from app.utils.emails import send_reset_password_email, send_account_verification_email
+from app.utils import send_reset_password_email, send_account_verification_email
 
 
 config = get_config()
