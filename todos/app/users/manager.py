@@ -19,7 +19,9 @@ logger = logging.getLogger(__name__)
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):
     reset_password_token_secret: SecretStr = config.JWT_SECRET_KEY
+    reset_password_token_lifetime_seconds: int = config.RESET_PASSWORD_TOKEN_LIFETIME_SECONDS
     verification_token_secret: SecretStr = config.JWT_SECRET_KEY
+    verification_token_lifetime_seconds: int = config.VERIFY_TOKEN_LIFETIME_SECONDS
 
     async def on_after_forgot_password(
             self,

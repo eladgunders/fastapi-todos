@@ -52,6 +52,10 @@ class Settings(BaseSettings):
             values.get('EMAILS_FROM_EMAIL')
         ])
 
+    # 60 seconds by 60 minutes (1 hour) and then by 12 (for 12 hours total)
+    RESET_PASSWORD_TOKEN_LIFETIME_SECONDS: int = 60 * 60 * 12
+    VERIFY_TOKEN_LIFETIME_SECONDS: int = 60 * 60 * 12
+
     FRONT_END_BASE_URL: AnyHttpUrl
 
     class Config:
