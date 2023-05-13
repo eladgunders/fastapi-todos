@@ -20,7 +20,8 @@ def send_email(
     subject_template: str = "",
     html_template: str = "",
 ) -> None:
-    assert config.EMAILS_ENABLED, 'no configuration provided for email variables'
+    if not config.EMAILS_ENABLED:
+        raise RuntimeError('no configuration provided for email variables')
     if not environment:
         environment = {}
     message = Message(
