@@ -1,9 +1,9 @@
 import uuid
 from typing import Optional
 import logging
-from urllib.request import Request
 
 from pydantic import SecretStr
+from fastapi import Request
 from fastapi_users import BaseUserManager, UUIDIDMixin
 
 from app.core.config import get_config
