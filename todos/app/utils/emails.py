@@ -52,6 +52,8 @@ def send_reset_password_email(*, email_to: str, token: str) -> None:
             'project_name': config.PROJECT_NAME,
             'email': email_to,
             'link': link,
+            # dividing by 3600 to get the number of hours from the number of seconds
+            'expire_hours': config.RESET_PASSWORD_TOKEN_LIFETIME_SECONDS / 3600,
         }
     )
 
@@ -69,5 +71,7 @@ def send_account_verification_email(*, email_to: str, token: str) -> None:
             'project_name': config.PROJECT_NAME,
             'email': email_to,
             'link': link,
+            # dividing by 3600 to get the number of hours from the number of seconds
+            'expire_hours': config.VERIFY_TOKEN_LIFETIME_SECONDS / 3600,
         }
     )
