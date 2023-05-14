@@ -2,24 +2,22 @@ from fastapi_users.openapi import OpenAPIResponseType
 from fastapi_users.router.common import ErrorModel
 
 
-def get_open_api_response(*, example: str, res_detail: str) -> OpenAPIResponseType:
+def get_open_api_response(examples_res_details: dict[str, str]) -> OpenAPIResponseType:
+    examples = {}
+    for example, res_detail in examples_res_details.items():
+        examples[example] = {
+            'summary': example,
+            'value': {'detail': res_detail}
+        }
     return {
         'model': ErrorModel,
         'content': {
             'application/json': {
-                'examples': {
-                    f'{example}': {
-                        'summary': f'{example}',
-                        'value': {'detail': f'{res_detail}'}
-                    }
-                }
+                'examples': examples
             }
         }
     }
 
 
 def get_open_api_unauthorized_access_response() -> OpenAPIResponseType:
-    return get_open_api_response(
-        example='Unauthorized access',
-        res_detail='Unauthorized'
-    )
+    return get_open_api_response({'Unauthorized access': 'Unauthorized'})

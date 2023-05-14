@@ -46,8 +46,7 @@ async def get_categories(
     responses={
         status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response(),
         status.HTTP_400_BAD_REQUEST: get_open_api_response(
-            example='Trying to add an existing category',
-            res_detail='category name already exists'
+            {'Trying to add an existing category': 'category name already exists'}
         )
     }
 )
@@ -67,12 +66,11 @@ async def add_category(
     responses={
         status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response(),
         status.HTTP_403_FORBIDDEN: get_open_api_response(
-            example='Trying to delete system or another users category',
-            res_detail='a user can not delete a category that was not created by him'
+            {'Trying to delete system or another users category':
+             'a user can not delete a category that was not created by him'}
         ),
         status.HTTP_404_NOT_FOUND: get_open_api_response(
-            example='Trying to delete non existing category',
-            res_detail='category does not exists'
+            {'Trying to delete non existing category': 'category does not exists'}
         )
     }
 )
