@@ -7,7 +7,7 @@ from app.users.users import current_logged_user
 from app.models.tables import User, Todo
 from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT, MAX_POSTGRES_INTEGER
 from app.schemas import TodoRead, TodoInDB, TodoCreate, TodoUpdate, TodoUpdateInDB
-from app.utils import exception_handler
+from app.utils import exception_handler, get_open_api_response, get_open_api_unauthorized_access_response
 
 
 router = APIRouter(
@@ -20,12 +20,12 @@ router = APIRouter(
 )
 
 
-@router.get('', response_model=list[TodoRead])
+@router.get(
+    '',
+    response_model=list[TodoRead],
+    responses={status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response()}
+)
 async def get_todos(
-    # The following lines are ignored by mypy because:
-    # error: Invalid type comment or annotation  [valid-type]
-    # note: Suggestion: use conint[...] instead of conint(...)
-    # even though it is like the documentation: https://docs.pydantic.dev/latest/usage/types/#arguments-to-conint
     skip: conint(ge=0, le=MAX_POSTGRES_INTEGER) = GET_MULTI_DEFAULT_SKIP,  # type: ignore[valid-type]
     limit: conint(ge=0, le=MAX_POSTGRES_INTEGER) = GET_MULTI_DEFAULT_LIMIT,  # type: ignore[valid-type]
     session: AsyncSession = Depends(get_async_session),
@@ -39,7 +39,21 @@ async def get_todos(
     )
 
 
-@router.post('', response_model=TodoRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    '',
+    response_model=TodoRead,
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response(),
+        status.HTTP_400_BAD_REQUEST: get_open_api_response(
+            {
+                'Trying to connect duplicate categories or another users category': 'categories are not valid',
+                'Trying to connect non existing priority': 'priority is not valid'
+            }
+        )
+
+    }
+)
 @exception_handler
 async def add_todo(
     todo_in: TodoCreate,
@@ -55,7 +69,26 @@ async def add_todo(
     return await db_service.add_todo(session, todo_in=todo_in)
 
 
-@router.put('/{todo_id}', response_model=TodoRead)
+@router.put(
+    '/{todo_id}',
+    response_model=TodoRead,
+    responses={
+        status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response(),
+        status.HTTP_400_BAD_REQUEST: get_open_api_response(
+            {
+                'Trying to connect duplicate categories or another users category': 'categories are not valid',
+                'Trying to connect non existing priority': 'priority is not valid'
+            }
+        ),
+        status.HTTP_403_FORBIDDEN: get_open_api_response(
+            {'Trying to update another users todo':
+             'a user can not update a todo that was not created by him'}
+        ),
+        status.HTTP_404_NOT_FOUND: get_open_api_response(
+            {'Trying to update non existing todo': 'todo does not exists'}
+        )
+    }
+)
 @exception_handler
 async def update_todo(
     todo_id: int,
@@ -74,7 +107,20 @@ async def update_todo(
     return await db_service.update_todo(session, updated_todo=updated_todo)
 
 
-@router.delete('/{todo_id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    '/{todo_id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+        status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response(),
+        status.HTTP_403_FORBIDDEN: get_open_api_response(
+            {'Trying to update another users todo':
+             'a user can not update a todo that was not created by him'}
+        ),
+        status.HTTP_404_NOT_FOUND: get_open_api_response(
+            {'Trying to update non existing todo': 'todo does not exists'}
+        )
+    }
+)
 @exception_handler
 async def delete_todo(
     todo_id: int,
