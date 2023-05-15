@@ -6,7 +6,7 @@
 
 ## Introduction 🧚
 
-The app provides a fully async backend web server for to-do lists apps.
+FastAPI Todos is an exceptional resource for individuals seeking to learn FastAPI or develop a front end for a todo-list app. Its powerful feature set, combined with the speed and simplicity of FastAPI, empowers developers to create robust and user-friendly applications efficiently. With flexible database support, comprehensive documentation, and a customizable codebase, FastAPI Todos streamlines the development process and enables you to deliver high-quality todo-list apps with ease.
 
 ## API 🌎 
 Click [here](./docs) for the full documentation.
