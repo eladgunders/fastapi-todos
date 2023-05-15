@@ -7,7 +7,8 @@ from app.users.users import current_logged_user
 from app.dal import db_service, GET_MULTI_DEFAULT_SKIP, GET_MULTI_DEFAULT_LIMIT, MAX_POSTGRES_INTEGER
 from app.schemas import CategoryCreate, CategoryRead, CategoryInDB
 from app.models.tables import Category, User
-from app.utils import exception_handler
+from app.utils import exception_handler, get_open_api_response, get_open_api_unauthorized_access_response
+
 
 router = APIRouter(
     prefix='/categories',
@@ -19,12 +20,12 @@ router = APIRouter(
 )
 
 
-@router.get('', response_model=list[CategoryRead])
+@router.get(
+    '',
+    response_model=list[CategoryRead],
+    responses={status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response()}
+)
 async def get_categories(
-    # The following lines are ignored by mypy because:
-    # error: Invalid type comment or annotation  [valid-type]
-    # note: Suggestion: use conint[...] instead of conint(...)
-    # even though it is like the documentation: https://docs.pydantic.dev/latest/usage/types/#arguments-to-conint
     skip: conint(ge=0, le=MAX_POSTGRES_INTEGER) = GET_MULTI_DEFAULT_SKIP,  # type: ignore[valid-type]
     limit: conint(ge=0, le=MAX_POSTGRES_INTEGER) = GET_MULTI_DEFAULT_LIMIT,  # type: ignore[valid-type]
     session: AsyncSession = Depends(get_async_session),
@@ -38,7 +39,17 @@ async def get_categories(
     )
 
 
-@router.post('', response_model=CategoryRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    '',
+    response_model=CategoryRead,
+    status_code=status.HTTP_201_CREATED,
+    responses={
+        status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response(),
+        status.HTTP_400_BAD_REQUEST: get_open_api_response(
+            {'Trying to add an existing category': 'category name already exists'}
+        )
+    }
+)
 @exception_handler
 async def add_category(
     category_in: CategoryCreate,
@@ -49,7 +60,20 @@ async def add_category(
     return await db_service.add_category(session, category_in=category_in)
 
 
-@router.delete('/{category_id}', status_code=status.HTTP_204_NO_CONTENT)
+@router.delete(
+    '/{category_id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+        status.HTTP_401_UNAUTHORIZED: get_open_api_unauthorized_access_response(),
+        status.HTTP_403_FORBIDDEN: get_open_api_response(
+            {'Trying to delete system or another users category':
+             'a user can not delete a category that was not created by him'}
+        ),
+        status.HTTP_404_NOT_FOUND: get_open_api_response(
+            {'Trying to delete non existing category': 'category does not exists'}
+        )
+    }
+)
 @exception_handler
 async def delete_category(
     category_id: int,
