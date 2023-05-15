@@ -9,6 +9,8 @@
 The app provides a fully async backend web server for to-do lists apps.
 
 ## API 🌎 
+Click [here](https://github.com/eladgunders/fastapi-todos/api-docs) for the full API documentation.
+
 [![API docs](api-docs/api.png)](https://github.com/eladgunders/fastapi-todos/api-docs)
 
 ## Technologies Used 📱
@@ -60,7 +62,7 @@ that the application is running.
 
 You can then access the application from http://localhost:8000.
 
-You can also view the Swagger documentation for the API by visiting http://localhost:8000/docs on your web browser.
+You can also play with the interactive API documentation (Swagger) by visiting http://localhost:8000/docs on your web browser.
 
 ## License 📜
 
