@@ -9,9 +9,9 @@
 The app provides a fully async backend web server for to-do lists apps.
 
 ## API 🌎 
-Click [here](./api-docs) for the full API documentation.
+Click [here](./docs) for the full documentation.
 
-[![API docs](api-docs/api.png)](./api-docs)
+[![API docs](docs/api/api.png)](./docs/api)
 
 ## Technologies Used 📱
 
