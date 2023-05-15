@@ -14,7 +14,15 @@ router = APIRouter(
 )
 
 
-@router.get('', status_code=status.HTTP_204_NO_CONTENT)
+@router.get(
+    '',
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses={
+            status.HTTP_503_SERVICE_UNAVAILABLE: {
+                'description': 'Database connection is unavailable',
+            }
+        }
+)
 async def health(
     session: AsyncSession = Depends(get_async_session),
 ) -> Response:
