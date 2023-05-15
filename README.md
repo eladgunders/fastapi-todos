@@ -9,9 +9,9 @@
 The app provides a fully async backend web server for to-do lists apps.
 
 ## API 🌎 
-Click [here](https://github.com/eladgunders/fastapi-todos/api-docs) for the full API documentation.
+Click [here](./api-docs) for the full API documentation.
 
-[![API docs](api-docs/api.png)](https://github.com/eladgunders/fastapi-todos/api-docs)
+[![API docs](api-docs/api.png)](./api-docs)
 
 ## Technologies Used 📱
 
